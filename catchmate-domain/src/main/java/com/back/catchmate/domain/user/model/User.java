@@ -108,4 +108,7 @@ public class User {
         }
     }
 
+    public void deleteFcmToken() {
+        this.fcmToken = null;
+    }
 }

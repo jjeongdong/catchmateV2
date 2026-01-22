@@ -53,4 +53,8 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken, user.getId(), tokenProvider.getRefreshTokenExpiration());
         return AuthToken.of(accessToken, refreshToken);
     }
+
+    public void logout(String refreshToken) {
+        refreshTokenRepository.deleteById(refreshToken);
+    }
 }

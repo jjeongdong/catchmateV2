@@ -45,4 +45,15 @@ public class AuthUseCase {
         String newAccessToken = authService.issueAccessToken(userId);
         return AuthReissueResponse.of(newAccessToken);
     }
+
+    @Transactional
+    public void logout(String refreshToken) {
+        Long userId = authService.extractUserIdFromRefreshToken(refreshToken);
+        User user = userService.getUserById(userId);
+
+        user.deleteFcmToken();
+        userService.updateUser(user);
+
+        authService.logout(refreshToken);
+    }
 }

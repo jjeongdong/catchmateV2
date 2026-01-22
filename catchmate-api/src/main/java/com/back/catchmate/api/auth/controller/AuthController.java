@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -32,5 +33,12 @@ public class AuthController {
     @Operation(summary = "엑세스 토큰 재발급 API", description = "엑세스 토큰을 재발급하는 API 입니다.")
     public ResponseEntity<AuthReissueResponse> reissue(@RequestHeader("RefreshToken") String refreshToken) {
         return ResponseEntity.ok(authUseCase.reissue(refreshToken));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃 API", description = "서버에서 리프레시 토큰을 삭제하여 로그아웃 처리합니다.")
+    public ResponseEntity<Void> logout(@RequestHeader("RefreshToken") String refreshToken) {
+        authUseCase.logout(refreshToken);
+        return ResponseEntity.ok().build();
     }
 }
