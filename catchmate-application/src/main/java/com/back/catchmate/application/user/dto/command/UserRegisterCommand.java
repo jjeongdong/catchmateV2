@@ -1,4 +1,4 @@
-package com.back.catchmate.application.user.dto;
+package com.back.catchmate.application.user.dto.command;
 
 import com.back.catchmate.domain.user.model.Provider;
 import lombok.AllArgsConstructor;

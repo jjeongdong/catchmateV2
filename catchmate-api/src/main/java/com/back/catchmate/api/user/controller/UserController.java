@@ -1,20 +1,31 @@
 package com.back.catchmate.api.user.controller;
 
+import com.back.catchmate.api.user.dto.request.UserProfileUpdateRequest;
 import com.back.catchmate.api.user.dto.request.UserRegisterRequest;
 import com.back.catchmate.application.user.UserUseCase;
-import com.back.catchmate.application.user.dto.UserRegisterResponse;
-import com.back.catchmate.application.user.dto.UserResponse;
+import com.back.catchmate.application.user.dto.UploadFile;
+import com.back.catchmate.application.user.dto.response.UserAlarmUpdateResponse;
+import com.back.catchmate.application.user.dto.response.UserRegisterResponse;
+import com.back.catchmate.application.user.dto.response.UserResponse;
+import com.back.catchmate.application.user.dto.response.UserUpdateResponse;
+import com.back.catchmate.domain.user.model.AlarmType;
 import com.back.catchmate.global.annotation.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Tag(name = "[사용자] 유저 관련 API")
 @RestController
@@ -40,5 +51,25 @@ public class UserController {
     public UserResponse getOtherUserProfile(@AuthUser Long userId,
                                             @PathVariable Long profileUserId) {
         return userUseCase.getOtherUserProfile(userId, profileUserId);
+    }
+
+    @PatchMapping(value = "/profile", consumes = "multipart/form-data")
+    @Operation(summary = "나의 정보 수정 API", description = "마이페이지에서 나의 정보를 수정하는 API 입니다. (수정된 최신 유저 정보 반환)")
+    public UserUpdateResponse updateProfile(@AuthUser Long userId,
+                                            @RequestPart(value = "request", required = false) @Valid UserProfileUpdateRequest request,
+                                            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
+        UploadFile uploadFile = UploadFile.builder()
+                .originalFilename(profileImage.getOriginalFilename())
+                .inputStream(profileImage.getInputStream())
+                .build();
+        return userUseCase.updateProfile(userId, request.toCommand(), uploadFile);
+    }
+
+    @PatchMapping("/alarm")
+    @Operation(summary = "알림 설정 API", description = "유저의 알람 수신 여부를 변경하는 API 입니다.")
+    public UserAlarmUpdateResponse updateAlarm(@AuthUser Long userId,
+                                               @RequestParam("alarmType") AlarmType alarmType,
+                                               @RequestParam("isEnabled") boolean isEnabled) {
+        return userUseCase.updateAlarm(userId, alarmType, isEnabled);
     }
 }

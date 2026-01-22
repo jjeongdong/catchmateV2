@@ -1,4 +1,4 @@
-package com.back.catchmate.application.user.dto;
+package com.back.catchmate.application.user.dto.response;
 
 import com.back.catchmate.application.club.dto.ClubResponse;
 import com.back.catchmate.domain.user.model.User;

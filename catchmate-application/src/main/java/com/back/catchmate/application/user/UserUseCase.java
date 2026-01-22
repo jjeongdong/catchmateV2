@@ -1,12 +1,17 @@
 package com.back.catchmate.application.user;
 
-import com.back.catchmate.application.user.dto.UserRegisterCommand;
-import com.back.catchmate.application.user.dto.UserRegisterResponse;
-import com.back.catchmate.application.user.dto.UserResponse;
+import com.back.catchmate.application.user.dto.UploadFile;
+import com.back.catchmate.application.user.dto.command.UserProfileUpdateCommand;
+import com.back.catchmate.application.user.dto.command.UserRegisterCommand;
+import com.back.catchmate.application.user.dto.response.UserAlarmUpdateResponse;
+import com.back.catchmate.application.user.dto.response.UserRegisterResponse;
+import com.back.catchmate.application.user.dto.response.UserResponse;
+import com.back.catchmate.application.user.dto.response.UserUpdateResponse;
 import com.back.catchmate.domain.auth.AuthToken;
 import com.back.catchmate.domain.auth.service.AuthService;
 import com.back.catchmate.domain.club.model.Club;
 import com.back.catchmate.domain.club.service.ClubService;
+import com.back.catchmate.domain.user.model.AlarmType;
 import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +59,32 @@ public class UserUseCase {
         boolean isMe = currentUserId.equals(targetUserId);
 
         return UserResponse.of(targetUser, isMe);
+    }
+
+    @Transactional
+    public UserUpdateResponse updateProfile(Long userId, UserProfileUpdateCommand command, UploadFile uploadFile) {
+        User user = userService.getUserById(userId);
+
+        Club club = null;
+        if (command.hasFavoriteClubChange()) {
+            club = clubService.getClub(command.getFavoriteClubId());
+        }
+
+        // TODO: S3 이미지 업로드 구현
+        // String imageUrl = s3UploadService.uploadFile(uploadFile);
+
+        user.updateProfile(command.getNickName(), command.getWatchStyle(), club, "imageUrl");
+        userService.updateUser(user);
+
+        return UserUpdateResponse.from(user);
+    }
+
+    @Transactional
+    public UserAlarmUpdateResponse updateAlarm(Long userId, AlarmType alarmType, boolean isEnabled) {
+        User user = userService.getUserById(userId);
+        user.updateAlarm(alarmType, isEnabled);
+        userService.updateUser(user);
+
+        return UserAlarmUpdateResponse.of(alarmType, isEnabled);
     }
 }

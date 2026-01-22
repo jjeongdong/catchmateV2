@@ -74,4 +74,38 @@ public class User {
             this.fcmToken = fcmToken;
         }
     }
+
+    public void updateProfile(String nickName, String watchStyle, Club club, String profileImageUrl) {
+        if (nickName != null) {
+            this.nickName = nickName;
+        }
+        if (watchStyle != null) {
+            this.watchStyle = watchStyle;
+        }
+        if (club != null) {
+            this.club = club;
+        }
+        if (profileImageUrl != null) {
+            this.profileImageUrl = profileImageUrl;
+        }
+    }
+
+    public void updateAlarm(AlarmType alarmType, boolean isEnabled) {
+        char status = isEnabled ? 'Y' : 'N';
+
+        if (alarmType == AlarmType.ALL) {
+            this.allAlarm = status;
+            this.chatAlarm = status;
+            this.enrollAlarm = status;
+            this.eventAlarm = status;
+            return;
+        }
+
+        switch (alarmType) {
+            case CHAT -> this.chatAlarm = status;
+            case ENROLL -> this.enrollAlarm = status;
+            case EVENT -> this.eventAlarm = status;
+        }
+    }
+
 }
