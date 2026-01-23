@@ -57,14 +57,13 @@ public class BoardUseCase {
         Club homeClub = clubService.getClub(command.getGameCreateCommand().getHomeClubId());
         Club awayClub = clubService.getClub(command.getGameCreateCommand().getAwayClubId());
 
-        // 게임 생성
-        Game game = Game.createGame(
+        // 게임이 존재하면 조회, 존재하지 않으면 새로운 게임 생성
+        Game game = gameService.findOrCreateGame(
                 homeClub,
                 awayClub,
                 command.getGameCreateCommand().getGameStartDate(),
                 command.getGameCreateCommand().getLocation()
         );
-        Game savedGame = gameService.createGame(game);
 
         // 게시글 도메인 객체 생성
         Board board = Board.createBoard(
@@ -73,7 +72,7 @@ public class BoardUseCase {
                 command.getMaxPerson(),
                 user,
                 cheerClub,
-                savedGame,
+                game,
                 command.getPreferredGender(),
                 command.getPreferredAgeRange(),
                 command.isCompleted()
@@ -99,8 +98,7 @@ public class BoardUseCase {
         Club awayClub = clubService.getClub(command.getGameCreateCommand().getAwayClubId());
 
         // Game 정보 수정 (홈/원정 팀 + 날짜 + 장소)
-        Game game = board.getGame();
-        game.update(
+        Game game = gameService.findOrCreateGame(
                 homeClub,
                 awayClub,
                 command.getGameCreateCommand().getGameStartDate(),
@@ -113,6 +111,7 @@ public class BoardUseCase {
                 command.getContent(),
                 command.getMaxPerson(),
                 cheerClub,
+                game,
                 command.getPreferredGender(),
                 command.getPreferredAgeRange(),
                 command.isCompleted()

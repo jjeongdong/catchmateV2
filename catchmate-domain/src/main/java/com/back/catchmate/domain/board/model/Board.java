@@ -47,15 +47,16 @@ public class Board {
                 .build();
     }
 
-    public void updateBoard(String title, String content, int maxPerson, Club cheerClub,
-                            String preferredGender, List<String> preferredAgeRange,
-                            boolean completed) {
+    public void updateBoard(String title, String content, int maxPerson,
+                            Club cheerClub, Game game, String preferredGender,
+                            List<String> preferredAgeRange, boolean completed) {
         validateUpdatable();
 
         this.title = title;
         this.content = content;
         this.maxPerson = maxPerson;
         this.cheerClub = cheerClub;
+        this.game = game;
         this.preferredGender = preferredGender;
         this.preferredAgeRange = String.join(",", preferredAgeRange);
         this.completed = completed;
