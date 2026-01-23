@@ -35,3 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
+/catchmate-boot/src/main/resources/application-local.yml
