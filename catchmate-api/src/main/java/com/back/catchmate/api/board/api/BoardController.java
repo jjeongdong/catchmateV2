@@ -65,4 +65,16 @@ public class BoardController {
 
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "유저별 게시글 조회", description = "특정 유저가 작성한 모든 게시글을 조회합니다.")
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<PagedResponse<BoardResponse>> getBoardsByUserId(
+            @Parameter(description = "조회 대상 유저 ID") @PathVariable Long userId,
+            @Parameter(hidden = true) @AuthUser Long loginUserId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        PagedResponse<BoardResponse> response = boardUseCase.getBoardsByUserId(userId, loginUserId, page, size);
+        return ResponseEntity.ok(response);
+    }
 }

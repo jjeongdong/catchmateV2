@@ -124,7 +124,7 @@ public class BoardUseCase {
         Board board = boardService.getBoard(boardId);
 
         // 찜 여부 확인
-        // TODO BookmarkService 연동 필요
+        // TODO: BookmarkService 연동 필요
         boolean isBookMarked = false;
 
         // 버튼 상태 계산 (작성자 여부, 신청 여부 등 확인)
@@ -170,5 +170,24 @@ public class BoardUseCase {
                 .toList();
 
         return new PagedResponse<>(boardPage, boardResponses);
+    }
+
+    public PagedResponse<BoardResponse> getBoardsByUserId(Long targetUserId, Long loginUserId, int page, int size) {
+        // 도메인 페이징 객체 생성
+        DomainPageable domainPageable = DomainPageable.of(page, size);
+
+        // 서비스 호출
+        DomainPage<Board> boardPage = boardService.getBoardsByUserId(targetUserId, domainPageable);
+
+        // 응답 DTO 변환
+        List<BoardResponse> responses = boardPage.getContent().stream()
+                .map(board -> {
+                    // TODO: 찜 여부 확인
+                    boolean isBookMarked = false;
+                    return BoardResponse.of(board, isBookMarked);
+                })
+                .toList();
+
+        return new PagedResponse<>(boardPage, responses);
     }
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,6 +45,28 @@ public class BoardRepositoryImpl implements BoardRepository {
         Pageable pageable = PageRequest.of(domainPageable.getPage(), domainPageable.getSize());
 
         Page<BoardEntity> entityPage = boardQueryRepository.findAllByCondition(condition, pageable);
+
+        List<Board> domains = entityPage.getContent().stream()
+                .map(BoardEntity::toModel)
+                .toList();
+
+        return new DomainPage<>(
+                domains,
+                entityPage.getNumber(),
+                entityPage.getSize(),
+                entityPage.getTotalElements()
+        );
+    }
+
+    @Override
+    public DomainPage<Board> findAllByUserId(Long userId, DomainPageable domainPageable) {
+        Pageable pageable = PageRequest.of(
+                domainPageable.getPage(),
+                domainPageable.getSize(),
+                Sort.by("liftUpDate").descending()
+        );
+
+        Page<BoardEntity> entityPage = jpaBoardRepository.findAllByUserId(userId, pageable);
 
         List<Board> domains = entityPage.getContent().stream()
                 .map(BoardEntity::toModel)

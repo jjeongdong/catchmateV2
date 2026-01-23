@@ -10,7 +10,6 @@ import error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.Optional;
 
 @Service
@@ -22,6 +21,10 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
+    public Optional<Board> findUncompletedBoard(Long userId) {
+        return boardRepository.findFirstByUserIdAndIsCompletedFalse(userId);
+    }
+
     public Board getBoard(Long boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.BOARD_NOT_FOUND));
@@ -31,8 +34,8 @@ public class BoardService {
         return boardRepository.findAllByCondition(condition, pageable);
     }
 
-    public Optional<Board> findUncompletedBoard(Long userId) {
-        return boardRepository.findFirstByUserIdAndIsCompletedFalse(userId);
+    public DomainPage<Board> getBoardsByUserId(Long userId, DomainPageable pageable) {
+        return boardRepository.findAllByUserId(userId, pageable);
     }
 
     public void updateBoard(Board board) {
