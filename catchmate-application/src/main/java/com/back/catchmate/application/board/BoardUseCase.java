@@ -1,11 +1,16 @@
 package com.back.catchmate.application.board;
 
 import com.back.catchmate.application.board.dto.command.BoardCreateCommand;
+import com.back.catchmate.application.board.dto.response.BoardDetailResponse;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
+import com.back.catchmate.application.common.PagedResponse;
+import com.back.catchmate.domain.board.dto.BoardSearchCondition;
 import com.back.catchmate.domain.board.model.Board;
 import com.back.catchmate.domain.board.service.BoardService;
 import com.back.catchmate.domain.club.model.Club;
 import com.back.catchmate.domain.club.service.ClubService;
+import com.back.catchmate.domain.common.DomainPage;
+import com.back.catchmate.domain.common.DomainPageable;
 import com.back.catchmate.domain.game.model.Game;
 import com.back.catchmate.domain.game.service.GameService;
 import com.back.catchmate.domain.user.model.User;
@@ -16,9 +21,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardUseCase {
     private final BoardService boardService;
@@ -68,7 +77,7 @@ public class BoardUseCase {
 
         // 게시글 저장
         Board savedBoard = boardService.createBoard(board);
-        return BoardResponse.of(savedBoard, false, "buttonSample", null);
+        return BoardResponse.of(savedBoard, false);
     }
 
     private BoardResponse updateBoard(Long boardId, Long userId, BoardCreateCommand command) {
@@ -107,6 +116,59 @@ public class BoardUseCase {
 
         // 6. 변경사항 저장
         boardService.updateBoard(board);
-        return BoardResponse.of(board, false, "buttonSample", null);
+        return BoardResponse.of(board, false);
+    }
+
+    public BoardDetailResponse getBoard(Long userId, Long boardId) {
+        // 게시글 도메인 조회 (없으면 예외 발생)
+        Board board = boardService.getBoard(boardId);
+
+        // 찜 여부 확인
+        // TODO BookmarkService 연동 필요
+        boolean isBookMarked = false;
+
+        // 버튼 상태 계산 (작성자 여부, 신청 여부 등 확인)
+        String buttonStatus = getButtonStatus(userId, board);
+
+        // 채팅방 ID 조회
+        // TODO: ChatService 연동 필요
+        Long chatRoomId = null;
+
+        return BoardDetailResponse.of(board, isBookMarked, buttonStatus, chatRoomId);
+    }
+
+    private String getButtonStatus(Long userId, Board board) {
+        // 작성자 본인인 경우
+        if (board.getUser().getId().equals(userId)) {
+            return "VIEW_CHAT";
+        }
+        // TODO: 로직 추가 필요
+        return "APPLY";
+    }
+
+    public PagedResponse<BoardResponse> getBoardList(Long userId, LocalDate gameDate, Integer maxPerson,
+                                                     List<Long> preferredTeamIdList, int page, int size) {
+
+        // TODO 차단된 유저 목록 조회 (현재는 빈 리스트로 처리)
+        List<Long> blockedUserIds = Collections.emptyList();
+
+        // 검색 조건 생성
+        BoardSearchCondition condition = BoardSearchCondition.builder()
+                .userId(userId)
+                .gameDate(gameDate)
+                .maxPerson(maxPerson)
+                .preferredTeamIdList(preferredTeamIdList)
+                .blockedUserIds(blockedUserIds)
+                .build();
+
+        // 도메인 페이징 객체 생성
+        DomainPageable domainPageable = DomainPageable.of(page, size);
+        DomainPage<Board> boardPage = boardService.getBoardList(condition, domainPageable);
+
+        List<BoardResponse> boardResponses = boardPage.getContent().stream()
+                .map(board -> BoardResponse.of(board, false))
+                .toList();
+
+        return new PagedResponse<>(boardPage, boardResponses);
     }
 }

@@ -57,9 +57,7 @@ public class UserUseCase {
 
     public UserResponse getOtherUserProfile(Long currentUserId, Long targetUserId) {
         User targetUser = userService.getUserById(targetUserId);
-        boolean isMe = currentUserId.equals(targetUserId);
-
-        return UserResponse.of(targetUser, isMe);
+        return UserResponse.from(targetUser);
     }
 
     public UserNicknameCheckResponse checkNickname(String nickName) {

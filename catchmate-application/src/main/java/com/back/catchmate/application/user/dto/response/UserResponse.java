@@ -25,7 +25,6 @@ public class UserResponse {
     private ClubResponse club;
     private LocalDate birthDate;
     private String watchStyle;
-    private final boolean isMe;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
@@ -41,25 +40,6 @@ public class UserResponse {
                 .club(ClubResponse.from(user.getClub()))
                 .birthDate(user.getBirthDate())
                 .watchStyle(user.getWatchStyle())
-                .isMe(true)
-                .build();
-    }
-
-    public static UserResponse of(User user, boolean isMe) {
-        return UserResponse.builder()
-                .userId(user.getId())
-                .email(user.getEmail())
-                .profileImageUrl(user.getProfileImageUrl())
-                .gender(user.getGender())
-                .allAlarm(user.getAllAlarm())
-                .chatAlarm(user.getChatAlarm())
-                .enrollAlarm(user.getEnrollAlarm())
-                .eventAlarm(user.getEventAlarm())
-                .nickName(user.getNickName())
-                .club(ClubResponse.from(user.getClub()))
-                .birthDate(user.getBirthDate())
-                .watchStyle(user.getWatchStyle())
-                .isMe(isMe)
                 .build();
     }
 }
