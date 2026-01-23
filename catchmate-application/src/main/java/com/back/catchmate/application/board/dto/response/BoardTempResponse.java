@@ -6,8 +6,6 @@ import com.back.catchmate.domain.board.model.Board;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 public class BoardTempResponse {

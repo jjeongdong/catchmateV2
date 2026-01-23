@@ -1,6 +1,6 @@
 package com.back.catchmate.application.board;
 
-import com.back.catchmate.application.board.dto.command.BoardCreateCommand;
+import com.back.catchmate.application.board.dto.command.BoardCreateOrUpdateCommand;
 import com.back.catchmate.application.board.dto.response.BoardDetailResponse;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.board.dto.response.BoardTempResponse;
@@ -37,7 +37,7 @@ public class BoardUseCase {
     private final GameService gameService;
 
     @Transactional
-    public BoardResponse writeBoard(Long userId, BoardCreateCommand command) {
+    public BoardResponse writeBoard(Long userId, BoardCreateOrUpdateCommand command) {
         if (command.getBoardId() != null) {
             return updateBoard(command.getBoardId(), userId, command);
         }
@@ -47,7 +47,7 @@ public class BoardUseCase {
         return createBoard(userId, command);
     }
 
-    private BoardResponse createBoard(Long userId, BoardCreateCommand command) {
+    private BoardResponse createBoard(Long userId, BoardCreateOrUpdateCommand command) {
         User user = userService.getUserById(userId);
         Club cheerClub = clubService.getClub(command.getCheerClubId());
 
@@ -81,7 +81,7 @@ public class BoardUseCase {
         return BoardResponse.of(savedBoard, false);
     }
 
-    private BoardResponse updateBoard(Long boardId, Long userId, BoardCreateCommand command) {
+    private BoardResponse updateBoard(Long boardId, Long userId, BoardCreateOrUpdateCommand command) {
         // 게시글 조회
         Board board = boardService.getBoard(boardId);
 
@@ -196,4 +196,6 @@ public class BoardUseCase {
         Optional<Board> tempBoard = boardService.getTempBoard(userId);
         return tempBoard.map(BoardTempResponse::from).orElse(null);
     }
+
+
 }

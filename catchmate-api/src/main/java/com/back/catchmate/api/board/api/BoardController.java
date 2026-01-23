@@ -1,6 +1,6 @@
 package com.back.catchmate.api.board.api;
 
-import com.back.catchmate.api.board.dto.request.BoardCreateRequest;
+import com.back.catchmate.api.board.dto.request.BoardCreateOrUpdateRequest;
 import com.back.catchmate.application.board.BoardUseCase;
 import com.back.catchmate.application.board.dto.response.BoardDetailResponse;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
@@ -14,8 +14,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +36,7 @@ public class BoardController {
     @PostMapping
     @Operation(summary = "게시글 생성/임시저장 API", description = "게시글을 생성하거나 임시저장합니다. (isCompleted: true=게시, false=임시저장)")
     public ResponseEntity<BoardResponse> writeBoard(@AuthUser Long userId,
-                                                    @Valid @RequestBody BoardCreateRequest request) {
+                                                    @Valid @RequestBody BoardCreateOrUpdateRequest request) {
         return ResponseEntity.ok(boardUseCase.writeBoard(userId, request.toCommand()));
     }
 
@@ -88,5 +90,13 @@ public class BoardController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{boardId}")
+    @Operation(summary = "게시글 수정 API", description = "게시글을 수정하는 API 입니다.")
+    public ResponseEntity<BoardResponse> updateBoard(@AuthUser Long userId,
+                                                     @PathVariable Long boardId,
+                                                     @Valid @RequestBody BoardCreateOrUpdateRequest request) {
+        return ResponseEntity.ok(boardUseCase.writeBoard(userId, request.toCommand(boardId)));
     }
 }

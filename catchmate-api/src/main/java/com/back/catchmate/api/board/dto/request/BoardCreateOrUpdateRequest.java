@@ -1,6 +1,6 @@
 package com.back.catchmate.api.board.dto.request;
 
-import com.back.catchmate.application.board.dto.command.BoardCreateCommand;
+import com.back.catchmate.application.board.dto.command.BoardCreateOrUpdateCommand;
 import com.back.catchmate.application.board.dto.command.GameCreateCommand;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -19,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoardCreateRequest {
+public class BoardCreateOrUpdateRequest {
     @Positive
     private Long boardId;
 
@@ -75,8 +74,22 @@ public class BoardCreateRequest {
         }
     }
 
-    public BoardCreateCommand toCommand() {
-        return BoardCreateCommand.builder()
+    public BoardCreateOrUpdateCommand toCommand() {
+        return BoardCreateOrUpdateCommand.builder()
+                .boardId(boardId)
+                .title(title)
+                .content(content)
+                .maxPerson(maxPerson)
+                .cheerClubId(cheerClubId)
+                .preferredGender(preferredGender)
+                .preferredAgeRange(preferredAgeRange)
+                .gameCreateCommand(gameRequest.toCommand())
+                .completed(completed)
+                .build();
+    }
+
+    public BoardCreateOrUpdateCommand toCommand(Long boardId) {
+        return BoardCreateOrUpdateCommand.builder()
                 .boardId(boardId)
                 .title(title)
                 .content(content)

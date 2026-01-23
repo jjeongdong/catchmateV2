@@ -3,6 +3,8 @@ package com.back.catchmate.domain.board.model;
 import com.back.catchmate.domain.club.model.Club;
 import com.back.catchmate.domain.game.model.Game;
 import com.back.catchmate.domain.user.model.User;
+import error.ErrorCode;
+import error.exception.BaseException;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -48,6 +50,8 @@ public class Board {
     public void updateBoard(String title, String content, int maxPerson, Club cheerClub,
                             String preferredGender, List<String> preferredAgeRange,
                             boolean completed) {
+        validateUpdatable();
+
         this.title = title;
         this.content = content;
         this.maxPerson = maxPerson;
@@ -55,5 +59,11 @@ public class Board {
         this.preferredGender = preferredGender;
         this.preferredAgeRange = String.join(",", preferredAgeRange);
         this.completed = completed;
+    }
+
+    private void validateUpdatable() {
+        if (this.currentPerson >= 2) {
+            throw new BaseException(ErrorCode.BOARD_CANNOT_UPDATE_AFTER_ENROLL);
+        }
     }
 }

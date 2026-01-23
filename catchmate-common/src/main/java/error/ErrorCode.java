@@ -44,6 +44,7 @@ public enum ErrorCode {
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 찜입니다."),
     BOOKMARK_BAD_REQUEST(HttpStatus.BAD_REQUEST, "본인 게시글은 찜할 수 없습니다."),
     FULL_PERSON(HttpStatus.BAD_REQUEST, "해당 게시글은 마감되었습니다."),
+    BOARD_CANNOT_UPDATE_AFTER_ENROLL(HttpStatus.BAD_REQUEST, "참여 인원이 존재하여 게시글을 수정할 수 없습니다."),
 
     // 알림
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 알림입니다."),

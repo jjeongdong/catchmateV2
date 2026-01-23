@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoardCreateCommand {
+public class BoardCreateOrUpdateCommand {
     private Long boardId;
     private final String title;
     private final String content;
