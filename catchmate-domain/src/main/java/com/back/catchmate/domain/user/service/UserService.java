@@ -14,15 +14,6 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    public Optional<User> findByProviderId(String providerIdWithProvider) {
-        return userRepository.findByProviderId(providerIdWithProvider);
-    }
-
     public User registerUser(User user) {
         Optional<User> existingUser = userRepository.findByProviderId(user.getProviderId());
         if (existingUser.isPresent()) {
@@ -30,6 +21,15 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public Optional<User> findByProviderId(String providerIdWithProvider) {
+        return userRepository.findByProviderId(providerIdWithProvider);
     }
 
     public void updateUser(User user) {

@@ -95,7 +95,7 @@ public class BoardController {
     }
 
     @PutMapping("/{boardId}")
-    @Operation(summary = "게시글 수정 API", description = "게시글을 수정하는 API 입니다.")
+    @Operation(summary = "게시글 수정 API", description = "게시글을 수정합니다.")
     public ResponseEntity<BoardResponse> updateBoard(@AuthUser Long userId,
                                                      @PathVariable Long boardId,
                                                      @Valid @RequestBody BoardCreateOrUpdateRequest request) {
@@ -103,7 +103,7 @@ public class BoardController {
     }
 
     @PatchMapping("/{boardId}/lift-up")
-    @Operation(summary = "게시글 끌어올리기 API", description = "게시글을 끌어올리는 API 입니다.")
+    @Operation(summary = "게시글 끌어올리기 API", description = "게시글을 끌어올립니다.")
     public BoardLiftUpResponse updateLiftUpDate(@AuthUser Long userId,
                                                 @PathVariable Long boardId) {
         return boardUseCase.updateLiftUpDate(userId, boardId);

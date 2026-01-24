@@ -1,7 +1,7 @@
 package com.back.catchmate.application.board.dto.response;
 
 import com.back.catchmate.application.club.dto.response.ClubResponse;
-import com.back.catchmate.application.user.dto.response.UserResponse; // 혹은 작성자 전용 WriterResponse
+import com.back.catchmate.application.user.dto.response.UserResponse;
 import com.back.catchmate.domain.board.model.Board;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

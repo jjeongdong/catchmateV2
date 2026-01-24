@@ -35,6 +35,12 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public Optional<Board> findByIdAndIsCompletedTrue(Long id) {
+        return jpaBoardRepository.findByIdAndCompletedTrue(id)
+                .map(BoardEntity::toModel);
+    }
+
+    @Override
     public Optional<Board> findFirstByUserIdAndIsCompletedFalse(Long userId) {
         return jpaBoardRepository.findFirstByUserIdAndCompletedFalse(userId)
                 .map(BoardEntity::toModel);

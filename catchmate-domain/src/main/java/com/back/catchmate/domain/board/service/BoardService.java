@@ -25,6 +25,11 @@ public class BoardService {
         return boardRepository.findFirstByUserIdAndIsCompletedFalse(userId);
     }
 
+    public Board getCompletedBoard(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new BaseException(ErrorCode.BOARD_NOT_FOUND));
+    }
+
     public Board getBoard(Long boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.BOARD_NOT_FOUND));
