@@ -14,17 +14,19 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserResponse {
     private Long userId;
+    private String nickName;
     private String email;
     private String profileImageUrl;
+
     private char gender;
-    private char allAlarm;
-    private char chatAlarm;
-    private char enrollAlarm;
-    private char eventAlarm;
-    private String nickName;
-    private ClubResponse club;
     private LocalDate birthDate;
     private String watchStyle;
+
+    private ClubResponse club;
+//    private char allAlarm;
+//    private char chatAlarm;
+//    private char enrollAlarm;
+//    private char eventAlarm;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
@@ -32,10 +34,10 @@ public class UserResponse {
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())
                 .gender(user.getGender())
-                .allAlarm(user.getAllAlarm())
-                .chatAlarm(user.getChatAlarm())
-                .enrollAlarm(user.getEnrollAlarm())
-                .eventAlarm(user.getEventAlarm())
+//                .allAlarm(user.getAllAlarm())
+//                .chatAlarm(user.getChatAlarm())
+//                .enrollAlarm(user.getEnrollAlarm())
+//                .eventAlarm(user.getEventAlarm())
                 .nickName(user.getNickName())
                 .club(ClubResponse.from(user.getClub()))
                 .birthDate(user.getBirthDate())

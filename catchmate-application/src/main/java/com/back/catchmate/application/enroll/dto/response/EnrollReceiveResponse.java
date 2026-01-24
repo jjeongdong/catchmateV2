@@ -1,11 +1,12 @@
 package com.back.catchmate.application.enroll.dto.response;
 
 import com.back.catchmate.application.board.dto.response.BoardResponse;
-import com.back.catchmate.application.common.PagedResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -13,9 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EnrollReceiveResponse {
     private BoardResponse boardResponse;
-    private PagedResponse<EnrollResponse> enrollResponses;
+    private List<EnrollResponse> enrollResponses;
 
-    public static EnrollReceiveResponse of(BoardResponse boardResponse, PagedResponse<EnrollResponse> enrollResponses) {
+    public static EnrollReceiveResponse of(BoardResponse boardResponse, List<EnrollResponse> enrollResponses) {
         return EnrollReceiveResponse.builder()
                 .boardResponse(boardResponse)
                 .enrollResponses(enrollResponses)

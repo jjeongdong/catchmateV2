@@ -12,6 +12,8 @@ import error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EnrollService {
@@ -50,6 +52,14 @@ public class EnrollService {
 
     public DomainPage<Enroll> getPendingEnrollsByBoardId(Long boardId, AcceptStatus acceptStatus, DomainPageable pageable) {
         return enrollRepository.findByBoardIdAndStatus(boardId, acceptStatus, pageable);
+    }
+
+    public DomainPage<Long> getBoardIdsWithPendingEnrolls(Long userId, DomainPageable pageable) {
+        return enrollRepository.findBoardIdsWithPendingEnrolls(userId, pageable);
+    }
+
+    public List<Enroll> getEnrollsByBoardIds(List<Long> boardIds) {
+        return enrollRepository.findAllByBoardIdIn(boardIds);
     }
 
     public void cancelEnrollment(Enroll enroll, User user) {

@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -19,14 +17,11 @@ public class BoardResponse {
     private String content;
     private int currentPerson;
     private int maxPerson;
-    private String preferredGender;
-    private String preferredAgeRange;
-    private LocalDateTime liftUpDate;
     private boolean bookMarked;
 
     private ClubResponse cheerClub; 
-    private GameResponse game;      
-    private UserResponse user;      
+    private GameResponse gameResponse;
+    private UserResponse userResponse;
 
     public static BoardResponse of(Board board, boolean bookMarked) {
         return BoardResponse.builder()
@@ -35,13 +30,10 @@ public class BoardResponse {
                 .content(board.getContent())
                 .currentPerson(board.getCurrentPerson())
                 .maxPerson(board.getMaxPerson())
-                .preferredGender(board.getPreferredGender())
-                .preferredAgeRange(board.getPreferredAgeRange())
-                .liftUpDate(board.getLiftUpDate())
                 .bookMarked(bookMarked)
                 .cheerClub(ClubResponse.from(board.getCheerClub()))
-                .game(GameResponse.from(board.getGame()))
-                .user(UserResponse.from(board.getUser())) 
+                .gameResponse(GameResponse.from(board.getGame()))
+                .userResponse(UserResponse.from(board.getUser()))
                 .build();
     }
 }

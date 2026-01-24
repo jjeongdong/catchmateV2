@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,16 +75,45 @@ public class EnrollRepositoryImpl implements EnrollRepository {
 
         Page<EnrollEntity> entityPage = jpaEnrollRepository.findAllByBoardId(boardId, status, pageable);
 
-        List<Enroll> content = entityPage.getContent().stream()
+        List<Enroll> domains = entityPage.getContent().stream()
                 .map(EnrollEntity::toModel)
                 .collect(Collectors.toList());
 
         return new DomainPage<>(
-                content,
+                domains,
                 entityPage.getNumber(),
                 entityPage.getSize(),
                 entityPage.getTotalElements()
         );
+    }
+
+    @Override
+    public DomainPage<Long> findBoardIdsWithPendingEnrolls(Long userId, DomainPageable pageable) {
+        PageRequest springPageable = PageRequest.of(
+                pageable.getPage(),
+                pageable.getSize()
+        );
+
+        Page<Long> idPage = jpaEnrollRepository.findDistinctBoardIdsByUserIdAndStatus(
+                userId, AcceptStatus.PENDING, springPageable
+        );
+
+        return new DomainPage<>(
+                idPage.getContent(),
+                idPage.getNumber(),
+                idPage.getSize(),
+                idPage.getTotalElements()
+        );
+    }
+
+    @Override
+    public List<Enroll> findAllByBoardIdIn(List<Long> boardIds) {
+        if (boardIds.isEmpty()) return Collections.emptyList();
+
+        return jpaEnrollRepository.findAllByBoardIdInAndStatus(boardIds, AcceptStatus.PENDING)
+                .stream()
+                .map(EnrollEntity::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override

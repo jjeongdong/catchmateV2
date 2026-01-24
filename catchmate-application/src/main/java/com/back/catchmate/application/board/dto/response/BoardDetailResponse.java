@@ -22,7 +22,8 @@ public class BoardDetailResponse {
     private String preferredGender;
     private String preferredAgeRange;
     private LocalDateTime liftUpDate;
-    private boolean isBookMarked;
+    private boolean bookMarked;
+
     private String buttonStatus;
     private Long chatRoomId;
 
@@ -40,7 +41,7 @@ public class BoardDetailResponse {
                 .preferredGender(board.getPreferredGender())
                 .preferredAgeRange(board.getPreferredAgeRange())
                 .liftUpDate(board.getLiftUpDate())
-                .isBookMarked(isBookMarked)
+                .bookMarked(isBookMarked)
                 .buttonStatus(buttonStatus)
                 .chatRoomId(chatRoomId)
                 .cheerClub(ClubResponse.from(board.getCheerClub()))

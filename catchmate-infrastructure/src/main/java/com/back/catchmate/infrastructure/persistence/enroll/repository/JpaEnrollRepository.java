@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
@@ -28,4 +29,30 @@ public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
     Page<EnrollEntity> findAllByBoardId(@Param("boardId") Long boardId,
                                         @Param("acceptStatus") AcceptStatus acceptStatus,
                                         Pageable pageable);
+
+
+    @Query(value = "SELECT e.board.id FROM EnrollEntity e " +
+            "WHERE e.board.user.id = :userId " +
+            "AND e.acceptStatus = :status " +
+            "GROUP BY e.board.id " +
+            "ORDER BY MAX(e.createdAt) DESC",
+            countQuery = "SELECT count(DISTINCT e.board.id) FROM EnrollEntity e " +
+                    "WHERE e.board.user.id = :userId " +
+                    "AND e.acceptStatus = :status")
+    Page<Long> findDistinctBoardIdsByUserIdAndStatus(
+            @Param("userId") Long userId,
+            @Param("status") AcceptStatus status,
+            Pageable pageable
+    );
+
+    @Query("SELECT e FROM EnrollEntity e " +
+            "JOIN FETCH e.board b " +
+            "JOIN FETCH e.user u " +
+            "WHERE b.id IN :boardIds " +
+            "AND e.acceptStatus = :status " +
+            "ORDER BY e.createdAt DESC") // 신청 최신순
+    List<EnrollEntity> findAllByBoardIdInAndStatus(
+            @Param("boardIds") List<Long> boardIds,
+            @Param("status") AcceptStatus status
+    );
 }
