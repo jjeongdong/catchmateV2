@@ -1,5 +1,6 @@
 package com.back.catchmate.infrastructure.persistence.enroll.repository;
 
+import com.back.catchmate.domain.enroll.model.AcceptStatus;
 import com.back.catchmate.infrastructure.persistence.enroll.entity.EnrollEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,12 @@ public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
             "JOIN FETCH b.game " +
             "WHERE e.user.id = :userId")
     Page<EnrollEntity> findAllByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("SELECT e FROM EnrollEntity e " +
+            "JOIN FETCH e.user " +
+            "WHERE e.board.id = :boardId " +
+            "AND e.acceptStatus = :acceptStatus")
+    Page<EnrollEntity> findAllByBoardId(@Param("boardId") Long boardId,
+                                        @Param("acceptStatus") AcceptStatus acceptStatus,
+                                        Pageable pageable);
 }

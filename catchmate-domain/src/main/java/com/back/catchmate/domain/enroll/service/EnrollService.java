@@ -48,6 +48,10 @@ public class EnrollService {
         return enrollRepository.findAllByUserId(userId, pageable);
     }
 
+    public DomainPage<Enroll> getPendingEnrollsByBoardId(Long boardId, AcceptStatus acceptStatus, DomainPageable pageable) {
+        return enrollRepository.findByBoardIdAndStatus(boardId, acceptStatus, pageable);
+    }
+
     public void cancelEnrollment(Enroll enroll, User user) {
         // 권한 확인
         if (!enroll.getUser().getId().equals(user.getId())) {

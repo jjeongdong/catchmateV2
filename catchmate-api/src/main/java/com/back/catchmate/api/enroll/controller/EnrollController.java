@@ -5,6 +5,7 @@ import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.EnrollUseCase;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
+import com.back.catchmate.application.enroll.dto.response.EnrollReceiveResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
 import com.back.catchmate.global.annotation.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +42,17 @@ public class EnrollController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return enrollUseCase.getRequestEnrollList(userId, page, size);
+    }
+
+    @GetMapping("/api/enrolls/receive")
+    @Operation(summary = "내가 받은 직관 신청 목록 조회", description = "내가 작성한 게시글(boardId)에 들어온 신청 목록을 조회합니다.")
+    public EnrollReceiveResponse getReceiveEnrollList(
+            @AuthUser Long userId,
+            @RequestParam Long boardId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return enrollUseCase.getReceiveEnrollList(userId, boardId, page, size);
     }
 
     @DeleteMapping("/api/enrolls/{enrollId}")

@@ -22,13 +22,13 @@ public class BoardResponse {
     private String preferredGender;
     private String preferredAgeRange;
     private LocalDateTime liftUpDate;
-    private boolean isBookMarked;
+    private boolean bookMarked;
 
     private ClubResponse cheerClub; 
     private GameResponse game;      
     private UserResponse user;      
 
-    public static BoardResponse of(Board board, boolean isBookMarked) {
+    public static BoardResponse of(Board board, boolean bookMarked) {
         return BoardResponse.builder()
                 .boardId(board.getId())
                 .title(board.getTitle())
@@ -38,7 +38,7 @@ public class BoardResponse {
                 .preferredGender(board.getPreferredGender())
                 .preferredAgeRange(board.getPreferredAgeRange())
                 .liftUpDate(board.getLiftUpDate())
-                .isBookMarked(isBookMarked)
+                .bookMarked(bookMarked)
                 .cheerClub(ClubResponse.from(board.getCheerClub()))
                 .game(GameResponse.from(board.getGame()))
                 .user(UserResponse.from(board.getUser())) 
