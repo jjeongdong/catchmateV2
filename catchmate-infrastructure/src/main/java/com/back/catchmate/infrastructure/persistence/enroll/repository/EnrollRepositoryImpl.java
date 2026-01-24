@@ -1,14 +1,21 @@
 package com.back.catchmate.infrastructure.persistence.enroll.repository;
 
 import com.back.catchmate.domain.board.model.Board;
+import com.back.catchmate.domain.common.DomainPage;
+import com.back.catchmate.domain.common.DomainPageable;
 import com.back.catchmate.domain.enroll.model.Enroll;
 import com.back.catchmate.domain.enroll.repository.EnrollRepository;
 import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.infrastructure.persistence.enroll.entity.EnrollEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,6 +38,28 @@ public class EnrollRepositoryImpl implements EnrollRepository {
     public Optional<Enroll> findByUserAndBoard(User user, Board board) {
         return jpaEnrollRepository.findByUserIdAndBoardId(user.getId(), board.getId())
                 .map(EnrollEntity::toModel);
+    }
+
+    @Override
+    public DomainPage<Enroll> findAllByUserId(Long userId, DomainPageable pageable) {
+        PageRequest springPageable = PageRequest.of(
+                pageable.getPage(),
+                pageable.getSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+
+        Page<EnrollEntity> entityPage = jpaEnrollRepository.findAllByUserId(userId, springPageable);
+
+        List<Enroll> domains = entityPage.getContent().stream()
+                .map(EnrollEntity::toModel)
+                .toList();
+
+        return new DomainPage<>(
+                domains,
+                entityPage.getNumber(),
+                entityPage.getSize(),
+                entityPage.getTotalElements()
+        );
     }
 
     @Override

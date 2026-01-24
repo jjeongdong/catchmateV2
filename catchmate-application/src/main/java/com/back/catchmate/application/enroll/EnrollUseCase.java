@@ -1,10 +1,15 @@
 package com.back.catchmate.application.enroll;
 
+import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.dto.command.EnrollCreateCommand;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
+import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
 import com.back.catchmate.domain.board.model.Board;
 import com.back.catchmate.domain.board.service.BoardService;
+import com.back.catchmate.domain.bookmark.service.BookmarkService;
+import com.back.catchmate.domain.common.DomainPage;
+import com.back.catchmate.domain.common.DomainPageable;
 import com.back.catchmate.domain.enroll.model.Enroll;
 import com.back.catchmate.domain.enroll.service.EnrollService;
 import com.back.catchmate.domain.user.model.User;
@@ -13,14 +18,21 @@ import error.ErrorCode;
 import error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class EnrollUseCase {
     private final EnrollService enrollService;
+    private final BookmarkService bookmarkService;
     private final BoardService boardService;
     private final UserService userService;
 
+    @Transactional
     public EnrollCreateResponse createEnroll(EnrollCreateCommand command) {
         // 신청자 정보 조회
         User applicant = userService.getUserById(command.getUserId());
@@ -38,6 +50,7 @@ public class EnrollUseCase {
         return EnrollCreateResponse.of(savedEnroll.getId());
     }
 
+    @Transactional
     public EnrollCancelResponse cancelEnroll(Long enrollId, Long userId) {
         // 신청자 정보 조회
         User user = userService.getUserById(userId);
@@ -49,5 +62,26 @@ public class EnrollUseCase {
         enrollService.cancelEnrollment(enroll, user);
 
         return EnrollCancelResponse.of(enrollId);
+    }
+
+    public PagedResponse<EnrollRequestResponse> getRequestEnrollList(Long userId, int page, int size) {
+        // 도메인 페이징 객체 생성
+        DomainPageable domainPageable = DomainPageable.of(page, size);
+
+        // 직관 신청 리스트 조회
+        DomainPage<Enroll> enrollPage = enrollService.getEnrollsByUserId(userId, domainPageable);
+
+        // DTO 변환 (내부에서 BookmarkService 호출)
+        List<EnrollRequestResponse> responses = enrollPage.getContent().stream()
+                .map(enroll -> {
+                    boolean isBookMarked = bookmarkService.isBookmarked(
+                            userId,
+                            enroll.getBoard().getId()
+                    );
+                    return EnrollRequestResponse.of(enroll, isBookMarked);
+                })
+                .toList();
+
+        return new PagedResponse<>(enrollPage, responses);
     }
 }

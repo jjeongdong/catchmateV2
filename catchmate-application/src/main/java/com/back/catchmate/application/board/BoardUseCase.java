@@ -185,7 +185,7 @@ public class BoardUseCase {
         // 응답 DTO 변환
         List<BoardResponse> responses = boardPage.getContent().stream()
                 .map(board -> {
-                    // TODO: 찜 여부 확인
+
                     boolean isBookMarked = false;
                     return BoardResponse.of(board, isBookMarked);
                 })

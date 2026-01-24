@@ -1,6 +1,8 @@
 package com.back.catchmate.domain.enroll.service;
 
 import com.back.catchmate.domain.board.model.Board;
+import com.back.catchmate.domain.common.DomainPage;
+import com.back.catchmate.domain.common.DomainPageable;
 import com.back.catchmate.domain.enroll.model.AcceptStatus;
 import com.back.catchmate.domain.enroll.model.Enroll;
 import com.back.catchmate.domain.enroll.repository.EnrollRepository;
@@ -40,6 +42,10 @@ public class EnrollService {
     public Enroll getEnrollById(Long enrollId) {
         return enrollRepository.findById(enrollId)
                 .orElseThrow(() -> new BaseException(ErrorCode.ENROLL_NOT_FOUND));
+    }
+
+    public DomainPage<Enroll> getEnrollsByUserId(Long userId, DomainPageable pageable) {
+        return enrollRepository.findAllByUserId(userId, pageable);
     }
 
     public void cancelEnrollment(Enroll enroll, User user) {

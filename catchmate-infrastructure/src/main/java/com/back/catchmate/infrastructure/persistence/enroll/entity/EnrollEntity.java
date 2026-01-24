@@ -79,6 +79,7 @@ public class EnrollEntity extends BaseTimeEntity {
                 .description(description)
                 .acceptStatus(acceptStatus)
                 .isNew(isNew)
+                .requestedAt(getCreatedAt())
                 .build();
     }
 }

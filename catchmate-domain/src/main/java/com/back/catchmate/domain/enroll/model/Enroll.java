@@ -5,6 +5,8 @@ import com.back.catchmate.domain.user.model.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class Enroll {
@@ -14,6 +16,7 @@ public class Enroll {
     private String description;
     private AcceptStatus acceptStatus;
     private boolean isNew;
+    private LocalDateTime requestedAt;
 
     public static Enroll createEnroll(User user, Board board, String description) {
         return Enroll.builder()
@@ -22,6 +25,7 @@ public class Enroll {
                 .description(description)
                 .acceptStatus(AcceptStatus.PENDING)
                 .isNew(true)
+                .requestedAt(LocalDateTime.now())
                 .build();
     }
 }

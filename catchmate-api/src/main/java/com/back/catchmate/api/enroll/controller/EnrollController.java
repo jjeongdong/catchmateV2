@@ -1,18 +1,22 @@
 package com.back.catchmate.api.enroll.controller;
 
 import com.back.catchmate.api.enroll.dto.request.EnrollCreateRequest;
+import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.EnrollUseCase;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
+import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
 import com.back.catchmate.global.annotation.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "[사용자] 직관 신청 관련 API")
@@ -27,6 +31,16 @@ public class EnrollController {
                                              @PathVariable Long boardId,
                                              @Valid @RequestBody EnrollCreateRequest request) {
         return enrollUseCase.createEnroll(request.toCommand(userId, boardId));
+    }
+
+    @GetMapping("/api/enrolls/request")
+    @Operation(summary = "내가 보낸 직관 신청 목록 조회", description = "내가 신청한 직관 신청 목록을 조회합니다.")
+    public PagedResponse<EnrollRequestResponse> getRequestEnrollList(
+            @AuthUser Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return enrollUseCase.getRequestEnrollList(userId, page, size);
     }
 
     @DeleteMapping("/api/enrolls/{enrollId}")
