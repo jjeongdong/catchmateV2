@@ -117,6 +117,12 @@ public class EnrollRepositoryImpl implements EnrollRepository {
     }
 
     @Override
+    public Optional<Enroll> findByIdWithFetch(Long enrollId) {
+        return jpaEnrollRepository.findByIdWithFetch(enrollId)
+                .map(EnrollEntity::toModel);
+    }
+
+    @Override
     public void delete(Enroll enroll) {
         jpaEnrollRepository.deleteById(enroll.getId());
     }

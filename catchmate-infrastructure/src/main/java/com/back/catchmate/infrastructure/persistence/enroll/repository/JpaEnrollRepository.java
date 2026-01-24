@@ -30,12 +30,11 @@ public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
                                         @Param("acceptStatus") AcceptStatus acceptStatus,
                                         Pageable pageable);
 
-
     @Query(value = "SELECT e.board.id FROM EnrollEntity e " +
             "WHERE e.board.user.id = :userId " +
             "AND e.acceptStatus = :status " +
             "GROUP BY e.board.id " +
-            "ORDER BY MAX(e.createdAt) DESC",
+            "ORDER BY e.board.createdAt DESC",
             countQuery = "SELECT count(DISTINCT e.board.id) FROM EnrollEntity e " +
                     "WHERE e.board.user.id = :userId " +
                     "AND e.acceptStatus = :status")
@@ -50,9 +49,16 @@ public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
             "JOIN FETCH e.user u " +
             "WHERE b.id IN :boardIds " +
             "AND e.acceptStatus = :status " +
-            "ORDER BY e.createdAt DESC") // 신청 최신순
+            "ORDER BY e.createdAt DESC")
     List<EnrollEntity> findAllByBoardIdInAndStatus(
             @Param("boardIds") List<Long> boardIds,
             @Param("status") AcceptStatus status
     );
+
+    @Query("SELECT e FROM EnrollEntity e " +
+            "JOIN FETCH e.user u " +
+            "JOIN FETCH e.board b " +
+            "JOIN FETCH b.user bu " +
+            "WHERE e.id = :enrollId")
+    Optional<EnrollEntity> findByIdWithFetch(@Param("enrollId") Long enrollId);
 }

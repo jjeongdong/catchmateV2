@@ -3,6 +3,7 @@ package com.back.catchmate.application.enroll;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.dto.command.EnrollCreateCommand;
+import com.back.catchmate.application.enroll.dto.response.EnrollDetailResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollReceiveResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
@@ -138,6 +139,21 @@ public class EnrollUseCase {
                 .toList();
 
         return new PagedResponse<>(boardIdPage, content);
+    }
+
+    public EnrollDetailResponse getEnrollDetail(Long userId, Long enrollId) {
+        Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
+
+        Long applicantId = enroll.getUser().getId();
+        Long writerId = enroll.getBoard().getUser().getId();
+
+        // 요청한 유저(userId)가 신청자도 아니고, 작성자도 아니면 에러
+        if (!userId.equals(applicantId) && !userId.equals(writerId)) {
+            throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        // DTO 변환
+        return EnrollDetailResponse.from(enroll);
     }
 
     @Transactional

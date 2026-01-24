@@ -18,5 +18,6 @@ public interface EnrollRepository {
     DomainPage<Enroll> findByBoardIdAndStatus(Long boardId, AcceptStatus status, DomainPageable pageable);
     DomainPage<Long> findBoardIdsWithPendingEnrolls(Long userId, DomainPageable pageable);
     List<Enroll> findAllByBoardIdIn(List<Long> boardIds);
+    Optional<Enroll> findByIdWithFetch(Long enrollId);
     void delete(Enroll enroll);
 }

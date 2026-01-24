@@ -62,6 +62,11 @@ public class EnrollService {
         return enrollRepository.findAllByBoardIdIn(boardIds);
     }
 
+    public Enroll getEnrollWithFetch(Long enrollId) {
+        return enrollRepository.findByIdWithFetch(enrollId)
+                .orElseThrow(() -> new BaseException(ErrorCode.ENROLL_NOT_FOUND));
+    }
+
     public void cancelEnrollment(Enroll enroll, User user) {
         // 권한 확인
         if (!enroll.getUser().getId().equals(user.getId())) {
