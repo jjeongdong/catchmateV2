@@ -77,7 +77,10 @@ public class Board {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public boolean isDeleted() {
-        return this.deletedAt != null;
+    public void increaseCurrentPerson() {
+        if (this.currentPerson >= this.maxPerson) {
+            throw new BaseException(ErrorCode.FULL_PERSON);
+        }
+        this.currentPerson++;
     }
 }

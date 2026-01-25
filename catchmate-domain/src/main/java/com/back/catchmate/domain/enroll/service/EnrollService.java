@@ -67,6 +67,10 @@ public class EnrollService {
                 .orElseThrow(() -> new BaseException(ErrorCode.ENROLL_NOT_FOUND));
     }
 
+    public void updateEnrollment(Enroll enroll) {
+        enrollRepository.save(enroll);
+    }
+
     public void cancelEnrollment(Enroll enroll, User user) {
         // 권한 확인
         if (!enroll.getUser().getId().equals(user.getId())) {

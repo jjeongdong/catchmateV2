@@ -3,11 +3,13 @@ package com.back.catchmate.application.enroll;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.dto.command.EnrollCreateCommand;
+import com.back.catchmate.application.enroll.dto.response.EnrollAcceptResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollDetailResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollReceiveResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollApplicantResponse;
+import com.back.catchmate.application.enroll.dto.response.EnrollRejectResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollResponse;
 import com.back.catchmate.domain.board.model.Board;
@@ -141,6 +143,7 @@ public class EnrollUseCase {
         return new PagedResponse<>(boardIdPage, content);
     }
 
+    @Transactional
     public EnrollDetailResponse getEnrollDetail(Long userId, Long enrollId) {
         Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
 
@@ -150,6 +153,11 @@ public class EnrollUseCase {
         // 요청한 유저(userId)가 신청자도 아니고, 작성자도 아니면 에러
         if (!userId.equals(applicantId) && !userId.equals(writerId)) {
             throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        if (enroll.isNew()) {
+            enroll.markAsRead();
+            enrollService.updateEnrollment(enroll);
         }
 
         // DTO 변환
@@ -168,5 +176,53 @@ public class EnrollUseCase {
         enrollService.cancelEnrollment(enroll, user);
 
         return EnrollCancelResponse.of(enrollId);
+    }
+
+    @Transactional
+    public EnrollAcceptResponse acceptEnroll(Long userId, Long enrollId) {
+        // 1. 신청 내역 조회
+        Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
+        Board board = enroll.getBoard();
+
+        // 2. 권한 검증 (게시글 작성자만 수락 가능)
+        if (!board.getUser().getId().equals(userId)) {
+            throw new BaseException(ErrorCode.ENROLL_ACCEPT_INVALID);
+        }
+
+        // 3. 게시글 인원 확인 및 증가
+        board.increaseCurrentPerson();
+
+        // 4. 신청 상태 변경
+        enroll.accept();
+
+        // 5. 변경 사항 저장
+        boardService.updateBoard(board);
+        enrollService.updateEnrollment(enroll);
+
+        // TODO: 신청자에게 알림 발송 로직 추가 가능
+
+        return EnrollAcceptResponse.of(enrollId);
+    }
+
+    @Transactional
+    public EnrollRejectResponse rejectEnroll(Long userId, Long enrollId) {
+        // 1. 신청 내역 조회
+        Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
+        Board board = enroll.getBoard();
+
+        // 2. 권한 검증 (게시글 작성자만 거절 가능)
+        if (!board.getUser().getId().equals(userId)) {
+            throw new BaseException(ErrorCode.ENROLL_REJECT_INVALID);
+        }
+
+        // 3. 신청 상태 변경
+        enroll.reject();
+
+        // 4. 변경 사항 저장
+        enrollService.updateEnrollment(enroll);
+
+        // TODO: 신청자에게 알림 발송 로직 추가 가능
+
+        return EnrollRejectResponse.of(enrollId);
     }
 }

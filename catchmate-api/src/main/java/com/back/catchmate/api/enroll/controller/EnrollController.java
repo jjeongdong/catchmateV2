@@ -3,11 +3,13 @@ package com.back.catchmate.api.enroll.controller;
 import com.back.catchmate.api.enroll.dto.request.EnrollCreateRequest;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.EnrollUseCase;
+import com.back.catchmate.application.enroll.dto.response.EnrollAcceptResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollDetailResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollReceiveResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollApplicantResponse;
+import com.back.catchmate.application.enroll.dto.response.EnrollRejectResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
 import com.back.catchmate.global.annotation.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,5 +78,19 @@ public class EnrollController {
     public ResponseEntity<EnrollCancelResponse> cancelEnroll(@PathVariable Long enrollId,
                                                              @AuthUser Long userId) {
         return ResponseEntity.ok(enrollUseCase.cancelEnroll(enrollId, userId));
+    }
+
+    @PatchMapping("/api/enrolls/{enrollId}/accept")
+    @Operation(summary = "직관 신청 수락 API", description = "들어온 직관 신청을 수락합니다. (게시글 작성자만 가능)")
+    public ResponseEntity<EnrollAcceptResponse> acceptEnroll(@AuthUser Long userId,
+                                                             @PathVariable Long enrollId) {
+        return ResponseEntity.ok(enrollUseCase.acceptEnroll(userId, enrollId));
+    }
+
+    @PatchMapping("/api/enrolls/{enrollId}/reject")
+    @Operation(summary = "직관 신청 거절 API", description = "들어온 직관 신청을 거절합니다. (게시글 작성자만 가능)")
+    public ResponseEntity<EnrollRejectResponse> rejectEnroll(@AuthUser Long userId,
+                                                             @PathVariable Long enrollId) {
+        return ResponseEntity.ok(enrollUseCase.rejectEnroll(userId, enrollId));
     }
 }
