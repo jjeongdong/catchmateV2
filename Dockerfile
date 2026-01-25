@@ -1,5 +1,5 @@
 # 1. Build Stage
-FROM openjdk:17-jdk-slim AS builder
+FROM eclipse-temurin:17-jdk-jammy AS builder
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ COPY . .
 RUN ./gradlew :catchmate-boot:bootJar --no-daemon
 
 # 2. Run Stage
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
