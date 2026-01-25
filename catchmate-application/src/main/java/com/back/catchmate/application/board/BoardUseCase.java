@@ -203,7 +203,6 @@ public class BoardUseCase {
         // 응답 DTO 변환
         List<BoardResponse> responses = boardPage.getContent().stream()
                 .map(board -> {
-
                     boolean isBookMarked = false;
                     return BoardResponse.of(board, isBookMarked);
                 })

@@ -45,9 +45,9 @@ public class User {
                                   String fcmToken,
                                   String watchStyle) {
         return User.builder()
+                .email(email)
                 .provider(provider)
                 .providerId(providerId)
-                .email(email)
                 .nickName(nickName)
                 .gender(gender)
                 .birthDate(birthDate)
