@@ -4,6 +4,7 @@ import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.enroll.dto.command.EnrollCreateCommand;
 import com.back.catchmate.application.enroll.dto.response.EnrollAcceptResponse;
+import com.back.catchmate.application.enroll.dto.response.EnrollCountResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollDetailResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollReceiveResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollCancelResponse;
@@ -155,13 +156,18 @@ public class EnrollUseCase {
             throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
         }
 
-        if (enroll.isNew()) {
+        if (enroll.isNew() && userId.equals(writerId)) {
             enroll.markAsRead();
             enrollService.updateEnrollment(enroll);
         }
 
         // DTO 변환
         return EnrollDetailResponse.from(enroll);
+    }
+
+    public EnrollCountResponse getMyPendingEnrollCount(Long userId) {
+        long count = enrollService.getPendingEnrollCountByBoardWriter(userId);
+        return EnrollCountResponse.of(count);
     }
 
     @Transactional

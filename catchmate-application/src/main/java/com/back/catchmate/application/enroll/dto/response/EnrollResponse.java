@@ -20,7 +20,7 @@ public class EnrollResponse {
                 .enrollId(enroll.getId())
                 .description(enroll.getDescription())
                 .requestDate(enroll.getRequestedAt())
-                .isNew(true) // TODO: 로직 구현
+                .isNew(enroll.isNew())
                 .applicant(ApplicantResponse.from(enroll.getUser()))
                 .build();
     }

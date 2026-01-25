@@ -67,6 +67,10 @@ public class EnrollService {
                 .orElseThrow(() -> new BaseException(ErrorCode.ENROLL_NOT_FOUND));
     }
 
+    public long getPendingEnrollCountByBoardWriter(Long userId) {
+        return enrollRepository.countByBoardWriterAndStatus(userId, AcceptStatus.PENDING);
+    }
+
     public void updateEnrollment(Enroll enroll) {
         enrollRepository.save(enroll);
     }

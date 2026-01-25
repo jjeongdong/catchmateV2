@@ -123,6 +123,11 @@ public class EnrollRepositoryImpl implements EnrollRepository {
     }
 
     @Override
+    public long countByBoardWriterAndStatus(Long userId, AcceptStatus status) {
+        return jpaEnrollRepository.countByBoardUserIdAndAcceptStatus(userId, status);
+    }
+
+    @Override
     public void delete(Enroll enroll) {
         jpaEnrollRepository.deleteById(enroll.getId());
     }

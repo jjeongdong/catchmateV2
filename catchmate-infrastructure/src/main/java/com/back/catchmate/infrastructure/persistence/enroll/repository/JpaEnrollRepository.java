@@ -61,4 +61,6 @@ public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
             "JOIN FETCH b.user bu " +
             "WHERE e.id = :enrollId")
     Optional<EnrollEntity> findByIdWithFetch(@Param("enrollId") Long enrollId);
+
+    long countByBoardUserIdAndAcceptStatus(Long userId, AcceptStatus acceptStatus);
 }
