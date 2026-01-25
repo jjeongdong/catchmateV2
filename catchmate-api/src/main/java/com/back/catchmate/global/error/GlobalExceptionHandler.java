@@ -1,9 +1,12 @@
-package error;
+package com.back.catchmate.global.error;
 
+import error.ErrorCode;
+import error.ErrorResponse;
 import error.exception.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,7 +45,14 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // 4. 나머지 서버 에러
+    // 4. 접근 권한 에러
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error("Access Denied: ", e);
+        return ErrorResponse.toResponseEntity(ErrorCode.FORBIDDEN_ACCESS);
+    }
+
+    // 5. 나머지 서버 에러
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("Server Error: ", e);

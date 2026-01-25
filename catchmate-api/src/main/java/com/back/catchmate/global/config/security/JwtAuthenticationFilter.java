@@ -36,13 +36,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 // 1. 토큰 파싱 및 검증 (실패 시 예외 발생)
                 Long userId = authUseCase.extractUserId(token);
+                String role = authUseCase.extractUserRole(token);
 
                 // 2. 인증 객체 생성 (권한이 있다면 Authorities에 추가)
                 // 여기서는 간단히 ROLE_USER로 고정하거나, DB에서 조회하여 설정 가능
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         userId, // Principal (User ID)
                         null,   // Credentials (보통 null)
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // Authorities
+                        Collections.singletonList(new SimpleGrantedAuthority(role)) // Authorities
                 );
 
                 // 3. SecurityContext에 저장

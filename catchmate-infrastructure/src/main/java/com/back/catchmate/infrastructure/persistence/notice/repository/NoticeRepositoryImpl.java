@@ -21,6 +21,12 @@ public class NoticeRepositoryImpl implements NoticeRepository {
     private final JpaNoticeRepository jpaNoticeRepository;
 
     @Override
+    public Notice save(Notice notice) {
+        NoticeEntity entity = NoticeEntity.from(notice);
+        return jpaNoticeRepository.save(entity).toModel();
+    }
+
+    @Override
     public Optional<Notice> findById(Long noticeId) {
         return jpaNoticeRepository.findByIdWithWriter(noticeId)
                 .map(NoticeEntity::toModel);

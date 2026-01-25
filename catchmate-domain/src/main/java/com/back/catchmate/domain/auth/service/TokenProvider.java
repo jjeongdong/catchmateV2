@@ -8,4 +8,6 @@ public interface TokenProvider {
     Long parseUserId(String token);
 
     Long getRefreshTokenExpiration();
+
+    String getRole(String token);
 }

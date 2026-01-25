@@ -15,12 +15,12 @@ public class Notice {
     private String content;
     private LocalDateTime createdAt;
 
-    public static Notice createNotice(User writer, String title, String content, LocalDateTime createdAt) {
+    public static Notice createNotice(User writer, String title, String content) {
         return Notice.builder()
                 .writer(writer)
                 .title(title)
                 .content(content)
-                .createdAt(createdAt)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

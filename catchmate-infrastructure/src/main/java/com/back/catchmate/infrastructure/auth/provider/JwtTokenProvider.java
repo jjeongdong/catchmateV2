@@ -1,6 +1,7 @@
 package com.back.catchmate.infrastructure.auth.provider;
 
 import com.back.catchmate.domain.auth.service.TokenProvider;
+import com.back.catchmate.domain.user.model.Authority;
 import error.ErrorCode;
 import error.exception.BaseException;
 import io.jsonwebtoken.Claims;
@@ -20,7 +21,6 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider implements TokenProvider {
-
     @Value("${jwt.secretKey}")
     private String secretKey;
     @Value("${jwt.access.expiration}")
@@ -34,15 +34,16 @@ public class JwtTokenProvider implements TokenProvider {
 
     private static final String ID_CLAIM = "id";
     private static final String BEARER = "Bearer ";
+    private static final String ROLE_CLAIM = "role";
 
     @Override
     public String createAccessToken(Long userId) {
-        return createToken(userId, ACCESS_TOKEN_SUBJECT, accessTokenExpirationPeriod);
+        return createToken(userId, ACCESS_TOKEN_SUBJECT, accessTokenExpirationPeriod, Authority.ROLE_USER);
     }
 
     @Override
     public String createRefreshToken(Long userId) {
-        return createToken(userId, REFRESH_TOKEN_SUBJECT, refreshTokenExpirationPeriod);
+        return createToken(userId, REFRESH_TOKEN_SUBJECT, refreshTokenExpirationPeriod, Authority.ROLE_USER);
     }
 
     @Override
@@ -69,12 +70,13 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     // 내부 헬퍼 메서드
-    private String createToken(Long userId, String tokenSubject, Long expirationPeriod) {
+    private String createToken(Long userId, String tokenSubject, Long expirationPeriod, Authority authority) {
         Date now = new Date();
         Date expirationTime = new Date(now.getTime() + expirationPeriod);
 
         Claims claims = Jwts.claims();
         claims.put(ID_CLAIM, userId);
+        claims.put(ROLE_CLAIM, authority);
 
         return BEARER + Jwts.builder()
                 .setSubject(tokenSubject)
@@ -95,5 +97,21 @@ public class JwtTokenProvider implements TokenProvider {
             return token.substring(BEARER.length());
         }
         return token;
+    }
+
+    @Override
+    public String getRole(String token) {
+        try {
+            token = removeBearer(token);
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return claims.get(ROLE_CLAIM, String.class);
+        } catch (Exception e) {
+            return Authority.ROLE_USER.name(); // 기본값 설정
+        }
     }
 }

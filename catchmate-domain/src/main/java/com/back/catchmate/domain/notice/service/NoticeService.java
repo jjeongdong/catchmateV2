@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 public class NoticeService {
     private final NoticeRepository noticeRepository;
 
+    public Notice createNotice(Notice notice) {
+        return noticeRepository.save(notice);
+    }
+
     // 공지사항 상세 조회
     public Notice getNotice(Long noticeId) {
         return noticeRepository.findById(noticeId)

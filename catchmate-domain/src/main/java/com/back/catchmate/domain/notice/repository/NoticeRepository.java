@@ -7,6 +7,7 @@ import com.back.catchmate.domain.notice.model.Notice;
 import java.util.Optional;
 
 public interface NoticeRepository {
+    Notice save(Notice notice);
     Optional<Notice> findById(Long noticeId);
     DomainPage<Notice> findAll(DomainPageable pageable);
 }

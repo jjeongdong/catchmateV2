@@ -22,6 +22,10 @@ public class AuthService {
         return tokenProvider.parseUserId(refreshToken);
     }
 
+    public String extractUserRoleFromToken(String token) {
+        return tokenProvider.getRole(token);
+    }
+
     public AuthToken issueToken(Long userId) {
         String accessToken = issueAccessToken(userId);
         String refreshToken = issueRefreshToken(userId);

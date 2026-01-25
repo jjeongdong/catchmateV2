@@ -1,6 +1,6 @@
 package com.back.catchmate;
 
-import error.GlobalExceptionHandler;
+import com.back.catchmate.global.error.GlobalExceptionHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

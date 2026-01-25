@@ -24,6 +24,10 @@ public class AuthUseCase {
         return authService.extractUserIdFromToken(token);
     }
 
+    public String extractUserRole(String token) {
+        return authService.extractUserRoleFromToken(token);
+    }
+
     @Transactional
     public AuthLoginResponse login(AuthLoginCommand command) {
         // 1. 유저 조회

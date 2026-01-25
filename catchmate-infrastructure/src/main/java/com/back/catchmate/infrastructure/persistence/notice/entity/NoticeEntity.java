@@ -13,13 +13,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "notice")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class NoticeEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +38,15 @@ public class NoticeEntity extends BaseTimeEntity {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    public static NoticeEntity from(Notice notice) {
+        return NoticeEntity.builder()
+                .id(notice.getId())
+                .writer(UserEntity.from(notice.getWriter()))
+                .title(notice.getTitle())
+                .content(notice.getContent())
+                .build();
+    }
 
     public Notice toModel() {
         return Notice.builder()
