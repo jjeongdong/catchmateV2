@@ -36,3 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 /catchmate-boot/src/main/resources/application-local.yml
+/catchmate-boot/src/main/resources/application-dev.yml
+/docker-compose.yml
