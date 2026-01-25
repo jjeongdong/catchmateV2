@@ -31,6 +31,7 @@ public class InquiryUseCase {
                 command.getContent()
         );
 
+        inquiryService.createInquiry(inquiry);
         return InquiryCreateResponse.of(inquiry.getId());
     }
 

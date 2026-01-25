@@ -78,6 +78,7 @@ public enum ErrorCode {
 
     // 신고
     REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 신고입니다."),
+    CANNOT_REPORT_SELF(HttpStatus.BAD_REQUEST, "자기 자신을 신고할 수 없습니다."),
 
     SOCKET_CONNECT_FAILED(HttpStatus.UNAUTHORIZED, "소켓 연결에 실패했습니다."),
 

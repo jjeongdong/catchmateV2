@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "enrolls",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_enroll_user_board", // 제약조건 이름 (선택사항)
+                        name = "uk_enroll_user_board",
                         columnNames = {"user_id", "board_id"}
                 )
         }
