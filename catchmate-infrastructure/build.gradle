@@ -1,6 +1,7 @@
 dependencies {
     implementation project(':catchmate-common')
     implementation project(':catchmate-domain')
+    implementation project(':catchmate-application')
 
     // JPA, MySQL, Redis, MongoDB
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

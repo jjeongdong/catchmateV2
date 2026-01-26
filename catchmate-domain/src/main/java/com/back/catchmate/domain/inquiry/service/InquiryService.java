@@ -22,4 +22,8 @@ public class InquiryService {
         return inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new BaseException(ErrorCode.INQUIRY_NOT_FOUND));
     }
+
+    public long getTotalInquiryCount() {
+        return inquiryRepository.count();
+    }
 }

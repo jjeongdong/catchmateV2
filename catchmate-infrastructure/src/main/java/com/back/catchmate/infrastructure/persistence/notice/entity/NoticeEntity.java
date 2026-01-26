@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "notice")
+@Table(name = "notices")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

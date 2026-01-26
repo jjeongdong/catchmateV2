@@ -54,4 +54,8 @@ public class BoardService {
     public void deleteBoard(Board board) {
         boardRepository.delete(board);
     }
+
+    public long getTotalBoardCount() {
+        return boardRepository.count();
+    }
 }

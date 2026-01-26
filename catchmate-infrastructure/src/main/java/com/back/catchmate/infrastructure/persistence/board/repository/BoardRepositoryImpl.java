@@ -91,4 +91,9 @@ public class BoardRepositoryImpl implements BoardRepository {
         BoardEntity entity = BoardEntity.from(board);
         jpaBoardRepository.delete(entity);
     }
+
+    @Override
+    public long count() {
+        return jpaBoardRepository.count();
+    }
 }

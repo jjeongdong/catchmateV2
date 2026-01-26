@@ -23,4 +23,9 @@ public class InquiryRepositoryImpl implements InquiryRepository {
     public Optional<Inquiry> findById(Long inquiryId) {
         return jpaInquiryRepository.findById(inquiryId).map(InquiryEntity::toModel);
     }
+
+    @Override
+    public long count() {
+        return jpaInquiryRepository.count();
+    }
 }

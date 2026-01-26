@@ -15,4 +15,7 @@ public interface BoardRepository {
     DomainPage<Board> findAllByCondition(BoardSearchCondition condition, DomainPageable pageable);
     DomainPage<Board> findAllByUserId(Long userId, DomainPageable pageable);
     void delete(Board board);
+
+    // 대시보드
+    long count();
 }

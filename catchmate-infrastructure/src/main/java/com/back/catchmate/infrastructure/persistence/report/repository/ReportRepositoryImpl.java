@@ -16,4 +16,9 @@ public class ReportRepositoryImpl implements ReportRepository {
         ReportEntity entity = ReportEntity.from(report);
         return jpaReportRepository.save(entity).toModel();
     }
+
+    @Override
+    public long count() {
+        return jpaReportRepository.count();
+    }
 }

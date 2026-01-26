@@ -6,4 +6,7 @@ import java.util.Optional;
 public interface InquiryRepository {
     Inquiry save(Inquiry inquiry);
     Optional<Inquiry> findById(Long inquiryId);
+    
+    // 대시보드
+    long count();
 }

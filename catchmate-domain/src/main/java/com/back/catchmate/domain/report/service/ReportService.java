@@ -13,4 +13,8 @@ public class ReportService {
     public Report createReport(Report report) {
         return reportRepository.save(report);
     }
+
+    public long getTotalReportCount() {
+        return reportRepository.count();
+    }
 }

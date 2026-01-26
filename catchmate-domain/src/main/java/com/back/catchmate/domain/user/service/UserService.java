@@ -7,6 +7,7 @@ import error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,25 @@ public class UserService {
 
     public boolean checkNickname(String nickName) {
         return userRepository.existsByNickName(nickName);
+    }
+
+    public long getTotalUserCount() {
+        return userRepository.count();
+    }
+
+    public long getUserCountByGender(Character gender) {
+        return userRepository.countByGender(gender);
+    }
+
+    public Map<String, Long> getUserCountByClub() {
+        return userRepository.countUsersByClub();
+    }
+
+    public Map<String, Long> getUserCountByAgeGroup() {
+        return userRepository.countUsersByWatchStyle();
+    }
+
+    public Map<String, Long> getUserCountByWatchStyle() {
+        return userRepository.countUsersByWatchStyle();
     }
 }

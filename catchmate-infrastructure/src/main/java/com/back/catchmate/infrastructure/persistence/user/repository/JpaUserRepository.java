@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface JpaUserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByProviderId(String providerId);
     boolean existsByNickName(String nickName);
+    long countByGender(Character gender);
 }
