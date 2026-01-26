@@ -1,4 +1,4 @@
-package com.back.catchmate.infrastructure.auth.repository;
+package com.back.catchmate.infrastructure.persistence.auth.repository;
 
 import com.back.catchmate.domain.auth.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 @Repository
 @RequiredArgsConstructor
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
-
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override

@@ -1,6 +1,6 @@
 package com.back.catchmate.infrastructure.auth.provider;
 
-import com.back.catchmate.domain.auth.service.TokenProvider;
+import com.back.catchmate.domain.auth.port.TokenProvider;
 import com.back.catchmate.domain.user.model.Authority;
 import error.ErrorCode;
 import error.exception.BaseException;

@@ -1,6 +1,7 @@
 package com.back.catchmate.domain.auth.service;
 
 import com.back.catchmate.domain.auth.model.AuthToken;
+import com.back.catchmate.domain.auth.port.TokenProvider;
 import com.back.catchmate.domain.auth.repository.RefreshTokenRepository;
 import com.back.catchmate.domain.user.model.User;
 import error.ErrorCode;
