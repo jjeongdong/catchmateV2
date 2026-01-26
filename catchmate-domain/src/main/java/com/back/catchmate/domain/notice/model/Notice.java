@@ -23,4 +23,9 @@ public class Notice {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    public void updateNotice(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

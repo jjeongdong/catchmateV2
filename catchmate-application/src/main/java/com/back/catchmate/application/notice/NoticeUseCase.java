@@ -2,6 +2,8 @@ package com.back.catchmate.application.notice;
 
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.notice.dto.command.NoticeCreateCommand;
+import com.back.catchmate.application.notice.dto.command.NoticeUpdateCommand;
+import com.back.catchmate.application.notice.dto.response.NoticeActionResponse;
 import com.back.catchmate.application.notice.dto.response.NoticeCreateResponse;
 import com.back.catchmate.application.notice.dto.response.NoticeDetailResponse;
 import com.back.catchmate.application.notice.dto.response.NoticeResponse;
@@ -19,8 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class NoticeUseCase {
     private final NoticeService noticeService;
     private final UserService userService;
@@ -57,5 +59,26 @@ public class NoticeUseCase {
                 .collect(Collectors.toList());
 
         return new PagedResponse<>(noticePage, responses);
+    }
+
+    @Transactional
+    public NoticeDetailResponse updateNotice(Long noticeId, NoticeUpdateCommand command) {
+        Notice notice = noticeService.getNotice(noticeId);
+
+        notice.updateNotice(
+                command.getTitle(),
+                command.getContent()
+        );
+
+        Notice updatedNotice = noticeService.updateNotice(notice);
+        return NoticeDetailResponse.from(updatedNotice);
+    }
+
+    @Transactional
+    public NoticeActionResponse deleteNotice(Long noticeId) {
+        Notice notice = noticeService.getNotice(noticeId);
+        noticeService.deleteNotice(notice);
+
+        return NoticeActionResponse.of(noticeId, "공지사항이 삭제되었습니다.");
     }
 }

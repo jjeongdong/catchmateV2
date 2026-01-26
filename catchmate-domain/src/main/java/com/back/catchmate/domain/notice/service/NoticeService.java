@@ -28,4 +28,14 @@ public class NoticeService {
     public DomainPage<Notice> getAllNotices(DomainPageable pageable) {
         return noticeRepository.findAll(pageable);
     }
+
+    // 공지사항 수정
+    public Notice updateNotice(Notice notice) {
+        return noticeRepository.save(notice);
+    }
+
+    // 공지사항 삭제
+    public void deleteNotice(Notice notice) {
+        noticeRepository.delete(notice);
+    }
 }

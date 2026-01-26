@@ -54,4 +54,10 @@ public class NoticeRepositoryImpl implements NoticeRepository {
                 entityPage.getTotalElements()
         );
     }
+
+    @Override
+    public void delete(Notice notice) {
+        NoticeEntity entity = NoticeEntity.from(notice);
+        jpaNoticeRepository.delete(entity);
+    }
 }

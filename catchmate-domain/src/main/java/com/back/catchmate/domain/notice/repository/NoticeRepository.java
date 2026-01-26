@@ -10,4 +10,5 @@ public interface NoticeRepository {
     Notice save(Notice notice);
     Optional<Notice> findById(Long noticeId);
     DomainPage<Notice> findAll(DomainPageable pageable);
+    void delete(Notice notice);
 }
