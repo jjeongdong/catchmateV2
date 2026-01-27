@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +41,12 @@ public class NotificationController {
         return notificationUseCase.getNotification(userId, notificationId);
     }
 
-
+    @Operation(summary = "알림 삭제", description = "특정 알림을 삭제합니다.")
+    @DeleteMapping("/{notificationId}")
+    public void deleteNotification(
+            @Parameter(hidden = true) @AuthUser Long userId,
+            @PathVariable Long notificationId
+    ) {
+        notificationUseCase.deleteNotification(userId, notificationId);
+    }
 }

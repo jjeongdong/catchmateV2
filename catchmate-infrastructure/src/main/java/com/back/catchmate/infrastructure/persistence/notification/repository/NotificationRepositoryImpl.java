@@ -25,8 +25,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     @Transactional
     public Notification save(Notification notification) {
-        UserEntity userEntity = UserEntity.from(notification.getUser());
-        NotificationEntity entity = NotificationEntity.from(notification, userEntity);
+        NotificationEntity entity = NotificationEntity.from(notification);
         return jpaNotificationRepository.save(entity).toModel();
     }
 
@@ -56,5 +55,11 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     public Optional<Notification> findById(Long notificationId) {
         return jpaNotificationRepository.findById(notificationId)
                 .map(NotificationEntity::toModel);
+    }
+
+    @Override
+    public void delete(Notification notification) {
+        NotificationEntity entity = NotificationEntity.from(notification);
+        jpaNotificationRepository.delete(entity);
     }
 }

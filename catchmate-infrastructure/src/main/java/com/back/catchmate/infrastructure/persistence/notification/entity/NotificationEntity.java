@@ -1,6 +1,7 @@
 package com.back.catchmate.infrastructure.persistence.notification.entity;
 
 import com.back.catchmate.domain.notification.model.Notification;
+import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.infrastructure.global.BaseTimeEntity;
 import com.back.catchmate.infrastructure.persistence.user.entity.UserEntity;
 import jakarta.persistence.Column;
@@ -49,10 +50,10 @@ public class NotificationEntity extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isRead;
 
-    public static NotificationEntity from(Notification notification, UserEntity userEntity) {
+    public static NotificationEntity from(Notification notification) {
         return NotificationEntity.builder()
                 .id(notification.getId())
-                .user(userEntity)
+                .user(UserEntity.from(notification.getUser()))
                 .title(notification.getTitle())
                 .body(notification.getBody())
                 .type(notification.getType())

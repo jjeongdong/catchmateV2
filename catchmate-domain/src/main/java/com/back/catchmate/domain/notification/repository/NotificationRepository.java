@@ -9,4 +9,5 @@ public interface NotificationRepository {
     Notification save(Notification notification);
     DomainPage<Notification> findAllByUserId(Long userId, DomainPageable pageable);
     Optional<Notification> findById(Long notificationId);
+    void delete(Notification notification);
 }

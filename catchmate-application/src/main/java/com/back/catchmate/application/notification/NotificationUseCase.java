@@ -49,4 +49,9 @@ public class NotificationUseCase {
         // 3. 응답 반환
         return NotificationResponse.from(notification);
     }
+
+    @Transactional
+    public void deleteNotification(Long userId, Long notificationId) {
+        notificationService.deleteNotification(userId, notificationId);
+    }
 }
