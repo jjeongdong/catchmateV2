@@ -46,6 +46,8 @@ public class ReportEntity extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private boolean completed;
+
     public Report toModel() {
         return Report.builder()
                 .id(this.id)
@@ -54,6 +56,7 @@ public class ReportEntity extends BaseTimeEntity {
                 .reason(this.reason)
                 .description(this.description)
                 .createdAt(this.getCreatedAt())
+                .completed(this.completed)
                 .build();
     }
 
@@ -64,6 +67,7 @@ public class ReportEntity extends BaseTimeEntity {
                 .reportedUser(UserEntity.from(report.getReportedUser()))
                 .reason(report.getReason())
                 .description(report.getDescription())
+                .completed(report.isCompleted())
                 .build();
     }
 }

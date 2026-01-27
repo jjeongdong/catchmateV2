@@ -16,6 +16,7 @@ public class Report {
     private ReportReason reason;
     private String description;
     private LocalDateTime createdAt;
+    private boolean completed;
 
     public static Report createReport(User reporter, User reportedUser, ReportReason reason, String description) {
         return Report.builder()
@@ -24,6 +25,11 @@ public class Report {
                 .reason(reason)
                 .description(description)
                 .createdAt(LocalDateTime.now())
+                .completed(false)
                 .build();
+    }
+
+    public void process() {
+        this.completed = true;
     }
 }

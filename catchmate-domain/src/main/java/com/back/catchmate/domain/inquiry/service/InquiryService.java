@@ -32,4 +32,8 @@ public class InquiryService {
     public long getTotalInquiryCount() {
         return inquiryRepository.count();
     }
+
+    public Inquiry update(Inquiry inquiry) {
+        return inquiryRepository.save(inquiry);
+    }
 }

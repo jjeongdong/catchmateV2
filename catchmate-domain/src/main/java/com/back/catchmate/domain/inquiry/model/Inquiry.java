@@ -29,4 +29,9 @@ public class Inquiry {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    public void registerAnswer(String answer) {
+        this.answer = answer;
+        this.status = InquiryStatus.ANSWERED;
+    }
 }

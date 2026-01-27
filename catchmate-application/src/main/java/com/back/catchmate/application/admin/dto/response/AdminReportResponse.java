@@ -16,6 +16,7 @@ public class AdminReportResponse {
     private String reason;
     private String description;
     private LocalDateTime createdAt;
+    private boolean completed;
 
     public static AdminReportResponse from(Report report) {
         return AdminReportResponse.builder()
@@ -25,6 +26,7 @@ public class AdminReportResponse {
                 .reason(report.getReason().name())
                 .description(report.getDescription())
                 .createdAt(report.getCreatedAt())
+                .completed(report.isCompleted())
                 .build();
     }
 }

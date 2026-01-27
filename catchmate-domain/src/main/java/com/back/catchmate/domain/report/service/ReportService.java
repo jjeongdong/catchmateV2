@@ -30,4 +30,8 @@ public class ReportService {
     public long getTotalReportCount() {
         return reportRepository.count();
     }
+
+    public void update(Report report) {
+        reportRepository.save(report);
+    }
 }

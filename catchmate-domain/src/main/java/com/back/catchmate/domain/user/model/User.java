@@ -111,4 +111,8 @@ public class User {
     public void deleteFcmToken() {
         this.fcmToken = null;
     }
+
+    public void markAsReported() {
+        this.isReported = true;
+    }
 }

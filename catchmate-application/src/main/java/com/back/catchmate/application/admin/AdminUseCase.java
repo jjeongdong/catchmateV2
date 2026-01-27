@@ -1,5 +1,7 @@
 package com.back.catchmate.application.admin;
 
+import com.back.catchmate.application.admin.dto.command.InquiryAnswerCommand;
+import com.back.catchmate.application.admin.dto.command.ReportActionCommand;
 import com.back.catchmate.application.admin.dto.response.AdminBoardDetailWithEnrollResponse;
 import com.back.catchmate.application.admin.dto.response.AdminBoardResponse;
 import com.back.catchmate.application.admin.dto.response.AdminDashboardResponse;
@@ -10,6 +12,8 @@ import com.back.catchmate.application.admin.dto.response.AdminReportDetailRespon
 import com.back.catchmate.application.admin.dto.response.AdminReportResponse;
 import com.back.catchmate.application.admin.dto.response.AdminUserDetailResponse;
 import com.back.catchmate.application.admin.dto.response.AdminUserResponse;
+import com.back.catchmate.application.admin.dto.response.InquiryAnswerResponse;
+import com.back.catchmate.application.admin.dto.response.ReportActionResponse;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.domain.board.model.Board;
 import com.back.catchmate.domain.board.service.BoardService;
@@ -137,9 +141,39 @@ public class AdminUseCase {
         return AdminReportDetailResponse.from(report);
     }
 
-    // 4. 문의 상세 조회
+    @Transactional
+    public ReportActionResponse processReport(ReportActionCommand command) {
+        // 1. 신고 내역 조회
+        Report report = reportService.getReport(command.getReportId());
+
+        // 2. 신고 당한 유저 조회 및 상태 변경
+        User reportedUser = report.getReportedUser();
+        reportedUser.markAsReported();
+        userService.updateUser(reportedUser);
+
+        // 3. 신고 내역 상태 업데이트
+        report.process();
+        reportService.update(report);
+
+        // TODO: 신고 처리 절차 추후 논의 후 추가 예정
+        return ReportActionResponse.of(report.getId(), reportedUser.getId());
+    }
+
     public AdminInquiryDetailResponse getInquiryDetail(Long inquiryId) {
         Inquiry inquiry = inquiryService.getInquiry(inquiryId);
         return AdminInquiryDetailResponse.from(inquiry);
+    }
+
+    @Transactional
+    public InquiryAnswerResponse answerInquiry(InquiryAnswerCommand command) {
+        // 1. 문의 조회
+        Inquiry inquiry = inquiryService.getInquiry(command.getInquiryId());
+
+        // 2. 답변 등록
+        inquiry.registerAnswer(command.getContent());
+        inquiryService.update(inquiry);
+
+        // TODO: 알림 발송 로직 추가 예정
+        return InquiryAnswerResponse.of(inquiry.getId(), inquiry.getUser().getId());
     }
 }
