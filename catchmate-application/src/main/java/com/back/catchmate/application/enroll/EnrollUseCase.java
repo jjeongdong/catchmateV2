@@ -21,6 +21,7 @@ import com.back.catchmate.domain.common.DomainPageable;
 import com.back.catchmate.domain.enroll.model.AcceptStatus;
 import com.back.catchmate.domain.enroll.model.Enroll;
 import com.back.catchmate.domain.enroll.service.EnrollService;
+import com.back.catchmate.domain.notification.port.NotificationSender;
 import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.domain.user.service.UserService;
 import error.ErrorCode;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,7 @@ public class EnrollUseCase {
     private final BookmarkService bookmarkService;
     private final BoardService boardService;
     private final UserService userService;
+    private final NotificationSender notificationSender;
 
     @Transactional
     public EnrollCreateResponse createEnroll(EnrollCreateCommand command) {
@@ -205,7 +208,9 @@ public class EnrollUseCase {
         boardService.updateBoard(board);
         enrollService.updateEnrollment(enroll);
 
-        // TODO: 신청자에게 알림 발송 로직 추가 가능
+        sendEnrollNotification(enroll.getUser(), board, "직관 신청 수락 알림",
+                String.format("[%s] 신청이 수락되었습니다. 채팅방을 확인해보세요!", board.getTitle()),
+                "ENROLL_ACCEPTED");
 
         return EnrollAcceptResponse.of(enrollId);
     }
@@ -227,8 +232,23 @@ public class EnrollUseCase {
         // 4. 변경 사항 저장
         enrollService.updateEnrollment(enroll);
 
-        // TODO: 신청자에게 알림 발송 로직 추가 가능
+        sendEnrollNotification(enroll.getUser(), board, "직관 신청 거절 알림",
+                String.format("아쉽지만 [%s] 신청이 거절되었습니다.", board.getTitle()),
+                "ENROLL_REJECTED");
 
         return EnrollRejectResponse.of(enrollId);
+    }
+
+    private void sendEnrollNotification(User recipient, Board board, String title, String body, String type) {
+        // 사용자 알림 설정 확인 (전체 알림 ON & 직관 알림 ON) 및 토큰 존재 확인
+        if (recipient.getFcmToken() != null && recipient.getEnrollAlarm() == 'Y') {
+
+            Map<String, String> data = Map.of(
+                    "type", type,
+                    "boardId", board.getId().toString()
+            );
+
+            notificationSender.sendNotification(recipient.getFcmToken(), title, body, data);
+        }
     }
 }
