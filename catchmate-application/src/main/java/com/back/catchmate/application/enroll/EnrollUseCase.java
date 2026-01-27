@@ -71,7 +71,7 @@ public class EnrollUseCase {
                 "직관 신청 알림",
                 String.format("%s님이 [%s] 직관을 신청했습니다.", applicant.getNickName(), board.getTitle()),
                 AlarmType.ENROLL,
-                savedEnroll.getId()
+                board.getId()
         );
 
         sendEnrollNotification(
@@ -278,7 +278,7 @@ public class EnrollUseCase {
                 board,
                 notification.getTitle(),
                 notification.getBody(),
-                "ENROLL_ACCEPTED"
+                "ENROLL_REJECTED"
         );
 
         return EnrollRejectResponse.of(enrollId);
