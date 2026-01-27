@@ -48,9 +48,6 @@ public class NotificationEntity extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String body;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AlarmType type;
@@ -65,7 +62,6 @@ public class NotificationEntity extends BaseTimeEntity {
                 .sender(notification.getSender() != null ? UserEntity.from(notification.getSender()) : null)
                 .board(notification.getBoard() != null ? BoardEntity.from(notification.getBoard()) : null)
                 .title(notification.getTitle())
-                .body(notification.getBody())
                 .type(notification.getType())
                 .isRead(notification.isRead())
                 .build();
@@ -78,7 +74,6 @@ public class NotificationEntity extends BaseTimeEntity {
                 .sender(this.sender != null ? this.sender.toModel() : null)
                 .board(this.board != null ? this.board.toModel() : null)
                 .title(this.title)
-                .body(this.body)
                 .type(this.type)
                 .isRead(this.isRead)
                 .createdAt(this.getCreatedAt())

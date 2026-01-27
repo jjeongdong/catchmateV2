@@ -28,7 +28,6 @@ public class NotificationResponse {
         return NotificationResponse.builder()
                 .id(notification.getId())
                 .title(notification.getTitle())
-                .body(notification.getBody())
                 .alarmType(notification.getType())
                 .isRead(notification.isRead())
                 .createdAt(notification.getCreatedAt())

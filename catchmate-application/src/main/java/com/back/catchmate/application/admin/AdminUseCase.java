@@ -22,7 +22,6 @@ import com.back.catchmate.application.admin.dto.response.NoticeCreateResponse;
 import com.back.catchmate.application.admin.dto.response.ReportActionResponse;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.notice.dto.response.NoticeDetailResponse;
-import com.back.catchmate.application.notice.dto.response.NoticeResponse;
 import com.back.catchmate.domain.board.model.Board;
 import com.back.catchmate.domain.board.service.BoardService;
 import com.back.catchmate.domain.common.DomainPage;
@@ -33,6 +32,9 @@ import com.back.catchmate.domain.inquiry.model.Inquiry;
 import com.back.catchmate.domain.inquiry.service.InquiryService;
 import com.back.catchmate.domain.notice.model.Notice;
 import com.back.catchmate.domain.notice.service.NoticeService;
+import com.back.catchmate.domain.notification.model.Notification;
+import com.back.catchmate.domain.notification.port.NotificationSender;
+import com.back.catchmate.domain.notification.service.NotificationService;
 import com.back.catchmate.domain.report.model.Report;
 import com.back.catchmate.domain.report.service.ReportService;
 import com.back.catchmate.domain.user.model.User;
@@ -40,9 +42,11 @@ import com.back.catchmate.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import user.enums.AlarmType;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -55,6 +59,8 @@ public class AdminUseCase {
     private final InquiryService inquiryService;
     private final EnrollService enrollService;
     private final NoticeService noticeService;
+    private final NotificationSender notificationSender;
+    private final NotificationService notificationService;
 
     public AdminDashboardResponse getDashboardStats() {
         return AdminDashboardResponse.builder()
@@ -82,13 +88,11 @@ public class AdminUseCase {
         return new PagedResponse<>(userPage, responses);
     }
 
-    // 유저 상세 정보 조회
     public AdminUserDetailResponse getUserDetail(Long userId) {
         User user = userService.getUserById(userId);
         return AdminUserDetailResponse.from(user);
     }
 
-    // 유저 작성 게시글 리스트 조회
     public PagedResponse<AdminBoardResponse> getUserBoards(Long userId, int page, int size) {
         DomainPageable domainPageable = new DomainPageable(page, size);
         DomainPage<Board> boardPage = boardService.getBoardsByUserId(userId, domainPageable);
@@ -185,8 +189,46 @@ public class AdminUseCase {
         inquiry.registerAnswer(command.getContent());
         inquiryService.update(inquiry);
 
-        // TODO: 알림 발송 로직 추가 예정
+        // 3. 알림 저장 및 푸시 알림 전송
+        saveNotification(
+                inquiry.getUser(),
+                null,
+                "문의 답변이 도착했어요",
+                AlarmType.INQUIRY_ANSWER,
+                inquiry.getId()
+        );
+
+        sendInquiryNotification(
+                inquiry.getUser(),
+                inquiry,
+                "문의 답변이 도착했어요",
+                "관리자님이 회원님의 문의에 답변을 남겼어요. 확인해보세요!",
+                "INQUIRY_ANSWER"
+        );
+
         return InquiryAnswerResponse.of(inquiry.getId(), inquiry.getUser().getId());
+    }
+
+    private void saveNotification(User user, User sender, String title, AlarmType type, Long referenceId) {
+        Notification notification = Notification.createNotification(
+                user,
+                sender,
+                title,
+                type,
+                referenceId
+        );
+        notificationService.createNotification(notification);
+    }
+
+    private void sendInquiryNotification(User recipient, Inquiry inquiry, String title, String body, String type) {
+        if (recipient.getFcmToken() != null && recipient.getEventAlarm() == 'Y') {
+            Map<String, String> data = Map.of(
+                    "type", type,
+                    "inquiryId", inquiry.getId().toString()
+            );
+
+            notificationSender.sendNotification(recipient.getFcmToken(), title, body, data);
+        }
     }
 
     @Transactional

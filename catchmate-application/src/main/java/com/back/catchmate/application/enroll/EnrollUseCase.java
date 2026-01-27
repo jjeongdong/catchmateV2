@@ -66,11 +66,10 @@ public class EnrollUseCase {
         Enroll savedEnroll = enrollService.requestEnrollment(applicant, board, command.getDescription());
 
         // 게시글 작성자에게 신청 알림 발송 및 저장
-        Notification notification = saveNotification(
+        saveNotification(
                 board.getUser(),
                 applicant,
                 "직관 신청 알림",
-                String.format("%s님이 [%s] 직관을 신청했습니다.", applicant.getNickName(), board.getTitle()),
                 AlarmType.ENROLL,
                 board.getId()
         );
@@ -78,8 +77,8 @@ public class EnrollUseCase {
         sendEnrollNotification(
                 board.getUser(),
                 board,
-                notification.getTitle(),
-                notification.getBody(),
+                "직관 신청 알림",
+                String.format("%s님이 [%s] 직관을 신청했습니다.", applicant.getNickName(), board.getTitle()),
                 "ENROLL_REQUEST"
         );
 
@@ -230,11 +229,10 @@ public class EnrollUseCase {
         boardService.updateBoard(board);
         enrollService.updateEnrollment(enroll);
 
-        Notification notification = saveNotification(
+        saveNotification(
                 enroll.getUser(),
                 board.getUser(),
                 "직관 신청 수락 알림",
-                String.format("[%s] 신청이 수락되었습니다. 채팅방을 확인해보세요!", board.getTitle()),
                 AlarmType.ENROLL,
                 board.getId()
         );
@@ -242,8 +240,8 @@ public class EnrollUseCase {
         sendEnrollNotification(
                 enroll.getUser(),
                 board,
-                notification.getTitle(),
-                notification.getBody(),
+                "직관 신청 수락 알림",
+                String.format("[%s] 신청이 수락되었습니다. 채팅방을 확인해보세요!", board.getTitle()),
                 "ENROLL_ACCEPTED"
         );
 
@@ -267,11 +265,10 @@ public class EnrollUseCase {
         // 4. 변경 사항 저장
         enrollService.updateEnrollment(enroll);
 
-        Notification notification = saveNotification(
+        saveNotification(
                 enroll.getUser(),
                 board.getUser(),
                 "직관 신청 거절 알림",
-                String.format("아쉽지만 [%s] 신청이 거절되었습니다.", board.getTitle()),
                 AlarmType.ENROLL,
                 board.getId()
         );
@@ -279,8 +276,8 @@ public class EnrollUseCase {
         sendEnrollNotification(
                 enroll.getUser(),
                 board,
-                notification.getTitle(),
-                notification.getBody(),
+                "직관 신청 거절 알림",
+                String.format("아쉽지만 [%s] 신청이 거절되었습니다.", board.getTitle()),
                 "ENROLL_REJECTED"
         );
 
@@ -298,16 +295,14 @@ public class EnrollUseCase {
         }
     }
 
-    private Notification saveNotification(User user, User sender, String title, String body, AlarmType type, Long referenceId) {
+    private void saveNotification(User user, User sender, String title, AlarmType type, Long referenceId) {
         Notification notification = Notification.createNotification(
                 user,
                 sender,
                 title,
-                body,
                 type,
                 referenceId
         );
         notificationService.createNotification(notification);
-        return notification;
     }
 }

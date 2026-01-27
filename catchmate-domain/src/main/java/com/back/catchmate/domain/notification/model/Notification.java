@@ -16,18 +16,16 @@ public class Notification {
     private User sender;
     private Board board;
     private String title;
-    private String body;
     private AlarmType type;
     private Long targetId;
     private boolean isRead;
     private LocalDateTime createdAt;
 
-    public static Notification createNotification(User user, User sender, String title, String body, AlarmType type, Long targetId) {
+    public static Notification createNotification(User user, User sender, String title, AlarmType type, Long targetId) {
         return Notification.builder()
                 .user(user)
                 .sender(sender)
                 .title(title)
-                .body(body)
                 .type(type)
                 .targetId(targetId)
                 .isRead(false)

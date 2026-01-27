@@ -8,7 +8,8 @@ public enum AlarmType {
     ALL("전체"),
     CHAT("채팅"),
     ENROLL("신청"),
-    EVENT("이벤트");
+    EVENT("이벤트"),
+    INQUIRY_ANSWER("1:1 문의 답변"),;
 
     @Getter
     private final String description;
