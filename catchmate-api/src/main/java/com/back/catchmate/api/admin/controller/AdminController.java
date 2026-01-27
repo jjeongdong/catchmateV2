@@ -1,6 +1,7 @@
 package com.back.catchmate.api.admin.controller;
 
 import com.back.catchmate.application.admin.AdminUseCase;
+import com.back.catchmate.application.admin.dto.response.AdminBoardDetailWithEnrollResponse;
 import com.back.catchmate.application.admin.dto.response.AdminBoardResponse;
 import com.back.catchmate.application.admin.dto.response.AdminDashboardResponse;
 import com.back.catchmate.application.admin.dto.response.AdminUserDetailResponse;
@@ -60,5 +61,22 @@ public class AdminController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(adminUseCase.getUserBoards(userId, page, size));
+    }
+
+    @GetMapping("/boards")
+    @Operation(summary = "관리자 게시글 전체 조회", description = "전체 게시글을 페이징하여 조회합니다.")
+    public ResponseEntity<PagedResponse<AdminBoardResponse>> getAllBoards(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(adminUseCase.getAllBoards(page, size));
+    }
+
+    @GetMapping("/boards/{boardId}")
+    @Operation(summary = "관리자 게시글 상세 조회", description = "게시글 상세 정보와 해당 게시글에 대한 신청자 목록을 조회합니다.")
+    public ResponseEntity<AdminBoardDetailWithEnrollResponse> getBoardDetail(
+            @PathVariable Long boardId
+    ) {
+        return ResponseEntity.ok(adminUseCase.getBoardDetailWithEnrollments(boardId));
     }
 }

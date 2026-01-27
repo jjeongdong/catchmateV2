@@ -26,13 +26,17 @@ public class BoardService {
     }
 
     public Board getCompletedBoard(Long boardId) {
-        return boardRepository.findById(boardId)
+        return boardRepository.findByIdAndIsCompletedTrue(boardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.BOARD_NOT_FOUND));
     }
 
     public Board getBoard(Long boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.BOARD_NOT_FOUND));
+    }
+
+    public DomainPage<Board> getBoardList(DomainPageable pageable) {
+        return boardRepository.findAll(pageable);
     }
 
     public DomainPage<Board> getBoardList(BoardSearchCondition condition, DomainPageable pageable) {

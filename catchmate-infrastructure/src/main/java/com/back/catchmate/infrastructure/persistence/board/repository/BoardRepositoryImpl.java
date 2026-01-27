@@ -16,8 +16,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.back.catchmate.infrastructure.persistence.board.entity.QBoardEntity.boardEntity;
-
 @Repository
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepository {
@@ -46,6 +44,25 @@ public class BoardRepositoryImpl implements BoardRepository {
     public Optional<Board> findFirstByUserIdAndIsCompletedFalse(Long userId) {
         return jpaBoardRepository.findFirstByUserIdAndCompletedFalse(userId)
                 .map(BoardEntity::toModel);
+    }
+
+    @Override
+    public DomainPage<Board> findAll(DomainPageable domainPageable) {
+        Pageable pageable = PageRequest.of(domainPageable.getPage(), domainPageable.getSize());
+
+        Page<BoardEntity> entityPage = jpaBoardRepository.findAll(pageable);
+
+        List<Board> domains = entityPage.getContent().stream()
+                .map(BoardEntity::toModel)
+                .filter(Board::isCompleted)
+                .toList();
+
+        return new DomainPage<>(
+                domains,
+                entityPage.getNumber(),
+                entityPage.getSize(),
+                entityPage.getTotalElements()
+        );
     }
 
     @Override

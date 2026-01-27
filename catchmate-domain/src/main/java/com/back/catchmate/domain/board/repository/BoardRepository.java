@@ -12,6 +12,7 @@ public interface BoardRepository {
     Optional<Board> findById(Long id);
     Optional<Board> findByIdAndIsCompletedTrue(Long id);
     Optional<Board> findFirstByUserIdAndIsCompletedFalse(Long userId);
+    DomainPage<Board> findAll(DomainPageable pageable);
     DomainPage<Board> findAllByCondition(BoardSearchCondition condition, DomainPageable pageable);
     DomainPage<Board> findAllByUserId(Long userId, DomainPageable pageable);
     void delete(Board board);
