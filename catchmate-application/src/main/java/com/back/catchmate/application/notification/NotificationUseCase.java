@@ -5,7 +5,6 @@ import com.back.catchmate.application.notification.dto.response.NotificationResp
 import com.back.catchmate.domain.common.DomainPage;
 import com.back.catchmate.domain.common.DomainPageable;
 import com.back.catchmate.domain.notification.model.Notification;
-import com.back.catchmate.domain.notification.repository.NotificationRepository;
 import com.back.catchmate.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

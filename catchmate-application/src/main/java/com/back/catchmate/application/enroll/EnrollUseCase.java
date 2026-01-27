@@ -68,6 +68,7 @@ public class EnrollUseCase {
         // 게시글 작성자에게 신청 알림 발송 및 저장
         Notification notification = saveNotification(
                 board.getUser(),
+                applicant,
                 "직관 신청 알림",
                 String.format("%s님이 [%s] 직관을 신청했습니다.", applicant.getNickName(), board.getTitle()),
                 AlarmType.ENROLL,
@@ -231,6 +232,7 @@ public class EnrollUseCase {
 
         Notification notification = saveNotification(
                 enroll.getUser(),
+                board.getUser(),
                 "직관 신청 수락 알림",
                 String.format("[%s] 신청이 수락되었습니다. 채팅방을 확인해보세요!", board.getTitle()),
                 AlarmType.ENROLL,
@@ -267,6 +269,7 @@ public class EnrollUseCase {
 
         Notification notification = saveNotification(
                 enroll.getUser(),
+                board.getUser(),
                 "직관 신청 거절 알림",
                 String.format("아쉽지만 [%s] 신청이 거절되었습니다.", board.getTitle()),
                 AlarmType.ENROLL,
@@ -295,9 +298,10 @@ public class EnrollUseCase {
         }
     }
 
-    private Notification saveNotification(User user, String title, String body, AlarmType type, Long referenceId) {
+    private Notification saveNotification(User user, User sender, String title, String body, AlarmType type, Long referenceId) {
         Notification notification = Notification.createNotification(
                 user,
+                sender,
                 title,
                 body,
                 type,

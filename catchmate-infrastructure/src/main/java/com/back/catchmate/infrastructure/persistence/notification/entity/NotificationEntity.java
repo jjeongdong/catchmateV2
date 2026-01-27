@@ -1,8 +1,8 @@
 package com.back.catchmate.infrastructure.persistence.notification.entity;
 
 import com.back.catchmate.domain.notification.model.Notification;
-import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.infrastructure.global.BaseTimeEntity;
+import com.back.catchmate.infrastructure.persistence.board.entity.BoardEntity;
 import com.back.catchmate.infrastructure.persistence.user.entity.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +37,14 @@ public class NotificationEntity extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private UserEntity sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private BoardEntity board;
+
     @Column(nullable = false)
     private String title;
 
@@ -54,6 +62,8 @@ public class NotificationEntity extends BaseTimeEntity {
         return NotificationEntity.builder()
                 .id(notification.getId())
                 .user(UserEntity.from(notification.getUser()))
+                .sender(notification.getSender() != null ? UserEntity.from(notification.getSender()) : null)
+                .board(notification.getBoard() != null ? BoardEntity.from(notification.getBoard()) : null)
                 .title(notification.getTitle())
                 .body(notification.getBody())
                 .type(notification.getType())
@@ -65,6 +75,8 @@ public class NotificationEntity extends BaseTimeEntity {
         return Notification.builder()
                 .id(this.id)
                 .user(this.user.toModel())
+                .sender(this.sender != null ? this.sender.toModel() : null)
+                .board(this.board != null ? this.board.toModel() : null)
                 .title(this.title)
                 .body(this.body)
                 .type(this.type)
