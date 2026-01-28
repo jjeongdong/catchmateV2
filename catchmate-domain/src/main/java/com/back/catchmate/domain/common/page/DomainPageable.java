@@ -1,4 +1,4 @@
-package com.back.catchmate.domain.common;
+package com.back.catchmate.domain.common.page;
 
 import lombok.Getter;
 

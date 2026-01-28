@@ -1,11 +1,10 @@
 package com.back.catchmate.infrastructure.persistence.notification.repository;
 
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.notification.model.Notification;
 import com.back.catchmate.domain.notification.repository.NotificationRepository;
 import com.back.catchmate.infrastructure.persistence.notification.entity.NotificationEntity;
-import com.back.catchmate.infrastructure.persistence.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -2,8 +2,8 @@ package com.back.catchmate.application.notification;
 
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.notification.dto.response.NotificationResponse;
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.notification.model.Notification;
 import com.back.catchmate.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;

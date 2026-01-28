@@ -20,6 +20,10 @@ public class GameResponse {
     private ClubResponse awayClub;
 
     public static GameResponse from(Game game) {
+        if (game == null) {
+            return null;
+        }
+
         return GameResponse.builder()
                 .gameId(game.getId())
                 .gameStartDate(game.getGameStartDate())

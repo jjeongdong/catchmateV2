@@ -1,6 +1,6 @@
 package com.back.catchmate.application.common;
 
-import com.back.catchmate.domain.common.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPage;
 import lombok.Getter;
 import java.util.List;
 

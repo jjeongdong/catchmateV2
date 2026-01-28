@@ -1,7 +1,7 @@
 package com.back.catchmate.infrastructure.persistence.user.repository;
 
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.domain.user.repository.UserRepository;
 import com.back.catchmate.infrastructure.persistence.user.entity.UserEntity;

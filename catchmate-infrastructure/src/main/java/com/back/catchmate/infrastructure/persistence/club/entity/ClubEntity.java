@@ -35,6 +35,10 @@ public class ClubEntity {
     private String region;
 
     public static ClubEntity from(Club club) {
+        if (club == null) {
+            return null;
+        }
+
         return ClubEntity.builder()
                 .id(club.getId())
                 .name(club.getName())

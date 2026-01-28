@@ -1,8 +1,8 @@
 package com.back.catchmate.infrastructure.persistence.enroll.repository;
 
 import com.back.catchmate.domain.board.model.Board;
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.enroll.model.AcceptStatus;
 import com.back.catchmate.domain.enroll.model.Enroll;
 import com.back.catchmate.domain.enroll.repository.EnrollRepository;

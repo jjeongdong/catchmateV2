@@ -17,7 +17,7 @@ public class Board {
     private Long id;
     private String title;
     private String content;
-    private int maxPerson;
+    private Integer maxPerson;
     private int currentPerson;
     private User user;
     private Club cheerClub;
@@ -46,6 +46,34 @@ public class Board {
                 .createdAt(LocalDateTime.now())
                 .liftUpDate(LocalDateTime.now())
                 .build();
+    }
+
+    public void validateForPublish() {
+        if (!this.completed) {
+            return;
+        }
+
+        if (title == null || title.isBlank()) {
+            throw new BaseException(ErrorCode.BOARD_TITLE_MISSING);
+        }
+        if (content == null || content.isBlank()) {
+            throw new BaseException(ErrorCode.BOARD_CONTENT_MISSING);
+        }
+        if (maxPerson == null) {
+            throw new BaseException(ErrorCode.BOARD_MAX_PERSON_MISSING);
+        }
+        if (cheerClub == null) {
+            throw new BaseException(ErrorCode.BOARD_CHEER_CLUB_MISSING);
+        }
+        if (game == null) {
+            throw new BaseException(ErrorCode.BOARD_GAME_MISSING);
+        }
+        if (preferredGender == null || preferredGender.isBlank()) {
+            throw new BaseException(ErrorCode.BOARD_PREFERRED_GENDER_MISSING);
+        }
+        if (preferredAgeRange == null || preferredAgeRange.isBlank()) {
+            throw new BaseException(ErrorCode.BOARD_PREFERRED_AGE_RANGE_MISSING);
+        }
     }
 
     public void updateBoard(String title, String content, int maxPerson,

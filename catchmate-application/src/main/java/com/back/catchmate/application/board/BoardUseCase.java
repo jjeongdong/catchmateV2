@@ -12,8 +12,8 @@ import com.back.catchmate.domain.board.service.BoardService;
 import com.back.catchmate.domain.bookmark.service.BookmarkService;
 import com.back.catchmate.domain.club.model.Club;
 import com.back.catchmate.domain.club.service.ClubService;
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.enroll.model.Enroll;
 import com.back.catchmate.domain.enroll.service.EnrollService;
 import com.back.catchmate.domain.game.model.Game;
@@ -59,18 +59,31 @@ public class BoardUseCase {
 
     private BoardResponse createBoard(Long userId, BoardCreateOrUpdateCommand command) {
         User user = userService.getUserById(userId);
-        Club cheerClub = clubService.getClub(command.getCheerClubId());
 
-        Club homeClub = clubService.getClub(command.getGameCreateCommand().getHomeClubId());
-        Club awayClub = clubService.getClub(command.getGameCreateCommand().getAwayClubId());
+        // 1. 응원 구단 Null 체크 (임시 저장 시 없을 수 있음)
+        Club cheerClub = null;
+        if (command.getCheerClubId() != null) {
+            cheerClub = clubService.getClub(command.getCheerClubId());
+        }
 
-        // 게임이 존재하면 조회, 존재하지 않으면 새로운 게임 생성
-        Game game = gameService.findOrCreateGame(
-                homeClub,
-                awayClub,
-                command.getGameCreateCommand().getGameStartDate(),
-                command.getGameCreateCommand().getLocation()
-        );
+        // 2. 게임 정보 Null 체크 (임시 저장 시 없을 수 있음)
+        Game game = null;
+        if (command.getGameCreateCommand() != null) {
+            Club homeClub = clubService.getClub(command.getGameCreateCommand().getHomeClubId());
+            Club awayClub = clubService.getClub(command.getGameCreateCommand().getAwayClubId());
+
+            game = gameService.findOrCreateGame(
+                    homeClub,
+                    awayClub,
+                    command.getGameCreateCommand().getGameStartDate(),
+                    command.getGameCreateCommand().getLocation()
+            );
+        }
+
+        // 3. 선호 연령대 Null 체크 (Board.createBoard 내부에서 String.join 시 NPE 방지)
+        List<String> preferredAgeRange = command.getPreferredAgeRange() != null
+                ? command.getPreferredAgeRange()
+                : Collections.emptyList();
 
         // 게시글 도메인 객체 생성
         Board board = Board.createBoard(
@@ -81,7 +94,7 @@ public class BoardUseCase {
                 cheerClub,
                 game,
                 command.getPreferredGender(),
-                command.getPreferredAgeRange(),
+                preferredAgeRange,
                 command.isCompleted()
         );
 
@@ -99,18 +112,30 @@ public class BoardUseCase {
             throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
         }
 
-        // 변경할 Club 정보들 조회 (응원 구단, 홈 구단, 원정 구단)
-        Club cheerClub = clubService.getClub(command.getCheerClubId());
-        Club homeClub = clubService.getClub(command.getGameCreateCommand().getHomeClubId());
-        Club awayClub = clubService.getClub(command.getGameCreateCommand().getAwayClubId());
+        // 1. 응원 구단 Null 체크
+        Club cheerClub = null;
+        if (command.getCheerClubId() != null) {
+            cheerClub = clubService.getClub(command.getCheerClubId());
+        }
 
-        // Game 정보 수정 (홈/원정 팀 + 날짜 + 장소)
-        Game game = gameService.findOrCreateGame(
-                homeClub,
-                awayClub,
-                command.getGameCreateCommand().getGameStartDate(),
-                command.getGameCreateCommand().getLocation()
-        );
+        // 2. 게임 정보 Null 체크
+        Game game = null;
+        if (command.getGameCreateCommand() != null) {
+            Club homeClub = clubService.getClub(command.getGameCreateCommand().getHomeClubId());
+            Club awayClub = clubService.getClub(command.getGameCreateCommand().getAwayClubId());
+
+            game = gameService.findOrCreateGame(
+                    homeClub,
+                    awayClub,
+                    command.getGameCreateCommand().getGameStartDate(),
+                    command.getGameCreateCommand().getLocation()
+            );
+        }
+
+        // 3. 선호 연령대 Null 체크
+        List<String> preferredAgeRange = command.getPreferredAgeRange() != null
+                ? command.getPreferredAgeRange()
+                : Collections.emptyList();
 
         // Board 도메인 모델 업데이트 (응원팀 + 나머지 정보)
         board.updateBoard(
@@ -120,7 +145,7 @@ public class BoardUseCase {
                 cheerClub,
                 game,
                 command.getPreferredGender(),
-                command.getPreferredAgeRange(),
+                preferredAgeRange,
                 command.isCompleted()
         );
 

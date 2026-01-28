@@ -36,16 +36,15 @@ public class BoardEntity extends BaseTimeEntity {
     @Column(name = "board_id")
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Column
     private int maxPerson;
 
-    @Column(nullable = false)
+    @Column
     private int currentPerson;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,17 +52,17 @@ public class BoardEntity extends BaseTimeEntity {
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_id", nullable = false)
+    @JoinColumn(name = "club_id")
     private ClubEntity cheerClub;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "game_id")
     private GameEntity game;
 
-    @Column(nullable = false)
+    @Column
     private String preferredGender;
 
-    @Column(nullable = false)
+    @Column
     private String preferredAgeRange;
 
     @Column(nullable = false)
@@ -100,14 +99,13 @@ public class BoardEntity extends BaseTimeEntity {
                 .maxPerson(this.maxPerson)
                 .currentPerson(this.currentPerson)
                 .user(this.user.toModel())
-                .cheerClub(this.cheerClub.toModel())
-                .game(this.game.toModel())
+                .cheerClub(this.cheerClub != null ? this.cheerClub.toModel() : null)
+                .game(this.game != null ? this.game.toModel() : null)
                 .preferredGender(this.preferredGender)
                 .preferredAgeRange(this.preferredAgeRange)
                 .completed(this.completed)
                 .createdAt(this.getCreatedAt())
                 .liftUpDate(this.liftUpDate)
-
                 .build();
     }
 }

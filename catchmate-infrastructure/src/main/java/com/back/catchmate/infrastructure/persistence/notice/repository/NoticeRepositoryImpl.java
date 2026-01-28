@@ -1,7 +1,7 @@
 package com.back.catchmate.infrastructure.persistence.notice.repository;
 
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.notice.model.Notice;
 import com.back.catchmate.domain.notice.repository.NoticeRepository;
 import com.back.catchmate.infrastructure.persistence.notice.entity.NoticeEntity;

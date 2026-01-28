@@ -2,8 +2,8 @@ package com.back.catchmate.infrastructure.persistence.bookmark.repository;
 
 import com.back.catchmate.domain.bookmark.model.Bookmark;
 import com.back.catchmate.domain.bookmark.repository.BookmarkRepository;
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.infrastructure.persistence.bookmark.entity.BookmarkEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

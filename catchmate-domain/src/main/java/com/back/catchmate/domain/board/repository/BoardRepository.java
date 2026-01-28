@@ -2,8 +2,8 @@ package com.back.catchmate.domain.board.repository;
 
 import com.back.catchmate.domain.board.dto.BoardSearchCondition;
 import com.back.catchmate.domain.board.model.Board;
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 
 import java.util.Optional;
 

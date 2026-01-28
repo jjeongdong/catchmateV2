@@ -48,6 +48,13 @@ public enum ErrorCode {
     BOOKMARK_BAD_REQUEST(HttpStatus.BAD_REQUEST, "본인 게시글은 찜할 수 없습니다."),
     FULL_PERSON(HttpStatus.BAD_REQUEST, "해당 게시글은 마감되었습니다."),
     BOARD_CANNOT_UPDATE_AFTER_ENROLL(HttpStatus.BAD_REQUEST, "참여 인원이 존재하여 게시글을 수정할 수 없습니다."),
+    BOARD_TITLE_MISSING(HttpStatus.BAD_REQUEST, "게시글 제목은 필수입니다."),
+    BOARD_CONTENT_MISSING(HttpStatus.BAD_REQUEST, "게시글 내용은 필수입니다."),
+    BOARD_MAX_PERSON_MISSING(HttpStatus.BAD_REQUEST, "모집 인원은 필수입니다."),
+    BOARD_CHEER_CLUB_MISSING(HttpStatus.BAD_REQUEST, "응원 구단 선택은 필수입니다."),
+    BOARD_GAME_MISSING(HttpStatus.BAD_REQUEST, "직관할 경기 선택은 필수입니다."),
+    BOARD_PREFERRED_GENDER_MISSING(HttpStatus.BAD_REQUEST, "선호 성별 선택은 필수입니다."),
+    BOARD_PREFERRED_AGE_RANGE_MISSING(HttpStatus.BAD_REQUEST, "선호 연령대 선택은 필수입니다."),
 
     // 알림
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 알림입니다."),

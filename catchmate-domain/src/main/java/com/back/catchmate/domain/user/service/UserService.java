@@ -1,7 +1,7 @@
 package com.back.catchmate.domain.user.service;
 
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 import com.back.catchmate.domain.user.model.User;
 import com.back.catchmate.domain.user.repository.UserRepository;
 import error.ErrorCode;

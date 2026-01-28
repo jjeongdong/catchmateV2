@@ -1,8 +1,8 @@
 package com.back.catchmate.domain.bookmark.repository;
 
 import com.back.catchmate.domain.bookmark.model.Bookmark;
-import com.back.catchmate.domain.common.DomainPage;
-import com.back.catchmate.domain.common.DomainPageable;
+import com.back.catchmate.domain.common.page.DomainPage;
+import com.back.catchmate.domain.common.page.DomainPageable;
 
 import java.util.Optional;
 

@@ -47,6 +47,10 @@ public class GameEntity extends BaseTimeEntity {
     private String location;
 
     public static GameEntity from(Game game) {
+        if (game == null) {
+            return null;
+        }
+
         return GameEntity.builder()
                 .id(game.getId())
                 .gameStartDate(game.getGameStartDate())

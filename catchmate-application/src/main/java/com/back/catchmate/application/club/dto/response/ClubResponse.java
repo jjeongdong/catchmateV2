@@ -16,6 +16,10 @@ public class ClubResponse {
     private String region;
 
     public static ClubResponse from(Club club) {
+        if (club == null) {
+            return null;
+        }
+
         return ClubResponse.builder()
                 .clubId(club.getId())
                 .name(club.getName())
