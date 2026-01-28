@@ -69,6 +69,6 @@ public class BlockRepositoryImpl implements BlockRepository {
 
     @Override
     public List<Long> findAllBlockedUserIdsByBlocker(User user) {
-        return jpaBlockRepository.findAllBlockedUserIdsByBlocker(UserEntity.from(user));
+        return jpaBlockRepository.findAllBlockedUserIdsByBlocker(user.getId());
     }
 }

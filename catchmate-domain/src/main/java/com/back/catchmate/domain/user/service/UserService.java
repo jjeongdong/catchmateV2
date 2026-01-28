@@ -55,10 +55,6 @@ public class UserService {
         return userRepository.countUsersByClub();
     }
 
-    public Map<String, Long> getUserCountByAgeGroup() {
-        return userRepository.countUsersByWatchStyle();
-    }
-
     public Map<String, Long> getUserCountByWatchStyle() {
         return userRepository.countUsersByWatchStyle();
     }
