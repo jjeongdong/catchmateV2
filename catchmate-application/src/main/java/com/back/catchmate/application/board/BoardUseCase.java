@@ -98,6 +98,8 @@ public class BoardUseCase {
                 command.isCompleted()
         );
 
+        board.validateForPublish();
+
         // 게시글 저장
         Board savedBoard = boardService.createBoard(board);
         return BoardResponse.of(savedBoard, false);
@@ -148,6 +150,8 @@ public class BoardUseCase {
                 preferredAgeRange,
                 command.isCompleted()
         );
+
+        board.validateForPublish();
 
         // 6. 변경사항 저장
         boardService.updateBoard(board);
