@@ -1,6 +1,6 @@
 package com.back.catchmate.api.auth.controller;
 
-import com.back.catchmate.api.auth.dto.AuthLoginRequest;
+import com.back.catchmate.api.auth.dto.request.AuthLoginRequest;
 import com.back.catchmate.application.auth.AuthUseCase;
 import com.back.catchmate.application.auth.dto.response.AuthLoginResponse;
 import com.back.catchmate.application.auth.dto.response.AuthReissueResponse;

@@ -15,6 +15,9 @@ public class NoticeUpdateRequest {
     private String content;
 
     public NoticeUpdateCommand toCommand() {
-        return new NoticeUpdateCommand(title, content);
+        return NoticeUpdateCommand.builder()
+                .title(this.title)
+                .content(this.content)
+                .build();
     }
 }

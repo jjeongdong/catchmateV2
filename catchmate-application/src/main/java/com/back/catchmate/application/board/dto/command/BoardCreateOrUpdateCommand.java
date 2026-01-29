@@ -1,6 +1,5 @@
 package com.back.catchmate.application.board.dto.command;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class BoardCreateOrUpdateCommand {
     private Long boardId;
     private final String title;

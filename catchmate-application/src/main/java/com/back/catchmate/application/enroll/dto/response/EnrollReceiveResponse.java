@@ -10,7 +10,6 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class EnrollReceiveResponse {
     private BoardResponse boardResponse;

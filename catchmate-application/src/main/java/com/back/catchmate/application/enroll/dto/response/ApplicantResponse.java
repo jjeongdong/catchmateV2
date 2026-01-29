@@ -1,11 +1,13 @@
 package com.back.catchmate.application.enroll.dto.response;
 
 import com.back.catchmate.domain.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class ApplicantResponse {
     private Long userId;
     private String nickname;

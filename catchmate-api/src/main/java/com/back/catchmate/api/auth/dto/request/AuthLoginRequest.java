@@ -1,4 +1,4 @@
-package com.back.catchmate.api.auth.dto;
+package com.back.catchmate.api.auth.dto.request;
 
 import com.back.catchmate.application.auth.dto.command.AuthLoginCommand;
 import jakarta.validation.constraints.NotBlank;

@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class EnrollRequestResponse {
     private Long enrollId;

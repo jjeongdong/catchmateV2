@@ -14,8 +14,7 @@ import user.enums.Provider;
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class UserRegisterRequest {
 
     @Email(message = "email 형식이 올바르지 않습니다.")

@@ -1,6 +1,7 @@
 package com.back.catchmate.application.inquiry.dto.response;
 
 import com.back.catchmate.domain.inquiry.model.Inquiry;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class InquiryDetailResponse {
     private Long inquiryId;
     private String type;

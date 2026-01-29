@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "[관리자] 관리자 관련 PI")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
     private final AdminUseCase adminUseCase;
 

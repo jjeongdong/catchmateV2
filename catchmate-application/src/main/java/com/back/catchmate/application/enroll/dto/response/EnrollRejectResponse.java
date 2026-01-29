@@ -1,10 +1,12 @@
 package com.back.catchmate.application.enroll.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class EnrollRejectResponse {
     private Long enrollId;
     private String message;

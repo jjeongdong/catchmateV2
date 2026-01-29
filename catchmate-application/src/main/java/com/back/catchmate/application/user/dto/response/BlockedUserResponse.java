@@ -1,6 +1,7 @@
 package com.back.catchmate.application.user.dto.response;
 
 import com.back.catchmate.domain.user.model.Block;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class BlockedUserResponse {
     private Long blockId;
     private Long userId;

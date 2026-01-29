@@ -2,7 +2,6 @@ package com.back.catchmate.application.user.dto.response;
 
 import com.back.catchmate.application.club.dto.response.ClubResponse;
 import com.back.catchmate.domain.user.model.User;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserUpdateResponse {
     private Long userId;
     private String email;

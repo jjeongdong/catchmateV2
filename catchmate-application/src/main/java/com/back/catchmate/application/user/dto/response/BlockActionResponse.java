@@ -1,10 +1,12 @@
 package com.back.catchmate.application.user.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class BlockActionResponse {
     private Long targetUserId;
     private String message;

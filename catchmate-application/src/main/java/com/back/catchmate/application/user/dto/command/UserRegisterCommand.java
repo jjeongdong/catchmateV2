@@ -1,6 +1,5 @@
 package com.back.catchmate.application.user.dto.command;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserRegisterCommand {
     private Provider provider;
     private String providerIdWithProvider;

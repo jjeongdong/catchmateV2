@@ -8,8 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class UserProfileUpdateRequest {
     @Size(min = 2, max = 10, message = "닉네임은 2~10자여야 합니다.")
     private String nickName;

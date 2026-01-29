@@ -1,0 +1,42 @@
+package com.back.catchmate.application.enroll.event;
+
+import com.back.catchmate.domain.notification.port.NotificationSender;
+import com.back.catchmate.domain.user.model.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.transaction.event.TransactionPhase;
+
+import java.util.Map;
+
+@Component
+@RequiredArgsConstructor
+public class EnrollNotificationEventListener {
+
+    private final NotificationSender notificationSender;
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleEnrollNotification(EnrollNotificationEvent event) {
+        User recipient = event.recipient();
+
+        if (recipient.getFcmToken() == null || recipient.getEnrollAlarm() != 'Y') {
+            return;
+        }
+
+        System.out.println("Sending notification to token: " + recipient.getFcmToken());
+
+        Map<String, String> data = Map.of(
+                "type", event.type(),
+                "boardId", event.board().getId().toString()
+        );
+
+        notificationSender.sendNotification(
+                recipient.getFcmToken(),
+                event.title(),
+                event.body(),
+                data
+        );
+    }
+}

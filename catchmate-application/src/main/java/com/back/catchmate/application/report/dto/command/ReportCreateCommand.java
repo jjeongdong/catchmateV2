@@ -2,12 +2,14 @@ package com.back.catchmate.application.report.dto.command;
 
 import com.back.catchmate.domain.report.model.Report;
 import com.back.catchmate.domain.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import report.ReportReason;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class ReportCreateCommand {
     private Long reportedUserId;
     private ReportReason reason;

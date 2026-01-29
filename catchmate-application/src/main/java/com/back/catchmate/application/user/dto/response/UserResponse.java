@@ -2,7 +2,6 @@ package com.back.catchmate.application.user.dto.response;
 
 import com.back.catchmate.application.club.dto.response.ClubResponse;
 import com.back.catchmate.domain.user.model.User;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserResponse {
     private Long userId;
     private String nickName;
@@ -23,10 +22,6 @@ public class UserResponse {
     private String watchStyle;
 
     private ClubResponse club;
-//    private char allAlarm;
-//    private char chatAlarm;
-//    private char enrollAlarm;
-//    private char eventAlarm;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
@@ -34,10 +29,6 @@ public class UserResponse {
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())
                 .gender(user.getGender())
-//                .allAlarm(user.getAllAlarm())
-//                .chatAlarm(user.getChatAlarm())
-//                .enrollAlarm(user.getEnrollAlarm())
-//                .eventAlarm(user.getEventAlarm())
                 .nickName(user.getNickName())
                 .club(ClubResponse.from(user.getClub()))
                 .birthDate(user.getBirthDate())

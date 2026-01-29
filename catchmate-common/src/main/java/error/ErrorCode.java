@@ -25,6 +25,7 @@ public enum ErrorCode {
     ALREADY_ENROLL_ACCEPTED(HttpStatus.BAD_REQUEST, "이미 수락된 신청 내역이 있습니다."),
     ENROLL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 직관 신청입니다."),
     ENROLL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 보낸 직관 신청입니다."),
+
     ENROLL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "자신의 게시글에는 직관 신청을 할 수 없습니다."),
     ENROLL_CANCEL_INVALID(HttpStatus.BAD_REQUEST, "직관 신청을 취소할 권한이 없습니다."),
     ENROLL_ACCEPT_INVALID(HttpStatus.BAD_REQUEST, "직관 신청을 수락할 권한이 없습니다."),

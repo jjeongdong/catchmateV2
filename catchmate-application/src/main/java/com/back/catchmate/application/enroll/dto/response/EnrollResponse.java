@@ -1,6 +1,7 @@
 package com.back.catchmate.application.enroll.dto.response;
 
 import com.back.catchmate.domain.enroll.model.Enroll;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class EnrollResponse {
     private Long enrollId;
     private String description;

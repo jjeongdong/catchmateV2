@@ -3,26 +3,25 @@ package com.back.catchmate.application.notification.dto.response;
 import com.back.catchmate.domain.board.model.Board;
 import com.back.catchmate.domain.game.model.Game;
 import com.back.catchmate.domain.notification.model.Notification;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import user.enums.AlarmType;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class NotificationResponse {
-    private final Long id;
-    private final String title;
-    private final String body;
-    private final AlarmType alarmType;
-    private final boolean isRead;
-    private final LocalDateTime createdAt;
-    private final String senderProfileImageUrl;
-    private final String gameInfo;
+    private Long id;
+    private String title;
+    private String body;
+    private AlarmType alarmType;
+    private boolean isRead;
+    private LocalDateTime createdAt;
+    private String senderProfileImageUrl;
+    private String gameInfo;
 
     public static NotificationResponse from(Notification notification) {
         return NotificationResponse.builder()

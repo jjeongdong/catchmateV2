@@ -1,14 +1,13 @@
 package com.back.catchmate.application.club.dto.response;
 
 import com.back.catchmate.domain.club.model.Club;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ClubResponse {
     private Long clubId;
     private String name;

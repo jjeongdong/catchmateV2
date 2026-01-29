@@ -13,6 +13,7 @@ import com.back.catchmate.application.enroll.dto.response.EnrollApplicantRespons
 import com.back.catchmate.application.enroll.dto.response.EnrollRejectResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollResponse;
+import com.back.catchmate.application.enroll.event.EnrollNotificationEvent;
 import com.back.catchmate.domain.board.model.Board;
 import com.back.catchmate.domain.board.service.BoardService;
 import com.back.catchmate.domain.bookmark.service.BookmarkService;
@@ -29,6 +30,7 @@ import com.back.catchmate.domain.user.service.UserService;
 import error.ErrorCode;
 import error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import user.enums.AlarmType;
@@ -47,8 +49,8 @@ public class EnrollUseCase {
     private final BookmarkService bookmarkService;
     private final BoardService boardService;
     private final UserService userService;
-    private final NotificationSender notificationSender;
     private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public EnrollCreateResponse createEnroll(EnrollCreateCommand command) {
@@ -74,11 +76,12 @@ public class EnrollUseCase {
                 board.getId()
         );
 
-        sendEnrollNotification(
+        publishEnrollEvent(
                 board.getUser(),
                 board,
                 "직관 신청 알림",
-                String.format("%s님이 [%s] 직관을 신청했습니다.", applicant.getNickName(), board.getTitle()),
+                String.format("%s님이 [%s] 직관을 신청했습니다.",
+                        applicant.getNickName(), board.getTitle()),
                 "ENROLL_REQUEST"
         );
 
@@ -237,11 +240,12 @@ public class EnrollUseCase {
                 board.getId()
         );
 
-        sendEnrollNotification(
+        publishEnrollEvent(
                 enroll.getUser(),
                 board,
                 "직관 신청 수락 알림",
-                String.format("[%s] 신청이 수락되었습니다. 채팅방을 확인해보세요!", board.getTitle()),
+                String.format("[%s] 신청이 수락되었습니다. 채팅방을 확인해보세요!",
+                        board.getTitle()),
                 "ENROLL_ACCEPTED"
         );
 
@@ -273,26 +277,16 @@ public class EnrollUseCase {
                 board.getId()
         );
 
-        sendEnrollNotification(
+        publishEnrollEvent(
                 enroll.getUser(),
                 board,
                 "직관 신청 거절 알림",
-                String.format("아쉽지만 [%s] 신청이 거절되었습니다.", board.getTitle()),
+                String.format("아쉽지만 [%s] 신청이 거절되었습니다.",
+                        board.getTitle()),
                 "ENROLL_REJECTED"
         );
 
         return EnrollRejectResponse.of(enrollId);
-    }
-
-    private void sendEnrollNotification(User recipient, Board board, String title, String body, String type) {
-        if (recipient.getFcmToken() != null && recipient.getEnrollAlarm() == 'Y') {
-            Map<String, String> data = Map.of(
-                    "type", type,
-                    "boardId", board.getId().toString()
-            );
-
-            notificationSender.sendNotification(recipient.getFcmToken(), title, body, data);
-        }
     }
 
     private void saveNotification(User user, User sender, String title, AlarmType type, Long referenceId) {
@@ -304,5 +298,23 @@ public class EnrollUseCase {
                 referenceId
         );
         notificationService.createNotification(notification);
+    }
+
+    private void publishEnrollEvent(
+            User recipient,
+            Board board,
+            String title,
+            String body,
+            String type
+    ) {
+        eventPublisher.publishEvent(
+                new EnrollNotificationEvent(
+                        recipient,
+                        board,
+                        title,
+                        body,
+                        type
+                )
+        );
     }
 }

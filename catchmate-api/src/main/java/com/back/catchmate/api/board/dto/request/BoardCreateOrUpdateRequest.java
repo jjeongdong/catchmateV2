@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class BoardCreateOrUpdateRequest {
     @Positive
     private Long boardId;
@@ -37,8 +36,7 @@ public class BoardCreateOrUpdateRequest {
     private GameRequest gameRequest;
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
     public static class GameRequest {
         private Long homeClubId;
         private Long awayClubId;

@@ -4,6 +4,7 @@ import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.user.dto.response.UserResponse;
 import com.back.catchmate.domain.enroll.model.AcceptStatus;
 import com.back.catchmate.domain.enroll.model.Enroll;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class EnrollDetailResponse {
     private Long enrollId;
     private AcceptStatus acceptStatus;

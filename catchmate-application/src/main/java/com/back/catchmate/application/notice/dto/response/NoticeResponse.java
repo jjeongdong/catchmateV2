@@ -1,6 +1,7 @@
 package com.back.catchmate.application.notice.dto.response;
 
 import com.back.catchmate.domain.notice.model.Notice;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class NoticeResponse {
     private Long noticeId;
     private String title;

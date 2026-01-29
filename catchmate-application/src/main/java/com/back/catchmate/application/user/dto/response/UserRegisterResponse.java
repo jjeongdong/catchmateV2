@@ -1,6 +1,5 @@
 package com.back.catchmate.application.user.dto.response;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserRegisterResponse {
     private Long userId;
     private String accessToken;
