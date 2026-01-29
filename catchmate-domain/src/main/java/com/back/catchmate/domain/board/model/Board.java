@@ -32,7 +32,8 @@ public class Board {
     public static Board createBoard(String title, String content, int maxPerson, User user,
                                     Club cheerClub, Game game, String preferredGender,
                                     List<String> preferredAgeRange, boolean completed) {
-        return Board.builder()
+
+        Board board = Board.builder()
                 .title(title)
                 .content(content)
                 .maxPerson(maxPerson)
@@ -46,6 +47,27 @@ public class Board {
                 .createdAt(LocalDateTime.now())
                 .liftUpDate(LocalDateTime.now())
                 .build();
+
+        board.validateForPublish();
+
+        return board;
+    }
+
+    public void updateBoard(String title, String content, int maxPerson,
+                            Club cheerClub, Game game, String preferredGender,
+                            List<String> preferredAgeRange, boolean completed) {
+        validateUpdatable();
+
+        this.title = title;
+        this.content = content;
+        this.maxPerson = maxPerson;
+        this.cheerClub = cheerClub;
+        this.game = game;
+        this.preferredGender = preferredGender;
+        this.preferredAgeRange = String.join(",", preferredAgeRange);
+        this.completed = completed;
+
+        validateForPublish();
     }
 
     public void validateForPublish() {
@@ -74,21 +96,6 @@ public class Board {
         if (preferredAgeRange == null || preferredAgeRange.isBlank()) {
             throw new BaseException(ErrorCode.BOARD_PREFERRED_AGE_RANGE_MISSING);
         }
-    }
-
-    public void updateBoard(String title, String content, int maxPerson,
-                            Club cheerClub, Game game, String preferredGender,
-                            List<String> preferredAgeRange, boolean completed) {
-        validateUpdatable();
-
-        this.title = title;
-        this.content = content;
-        this.maxPerson = maxPerson;
-        this.cheerClub = cheerClub;
-        this.game = game;
-        this.preferredGender = preferredGender;
-        this.preferredAgeRange = String.join(",", preferredAgeRange);
-        this.completed = completed;
     }
 
     private void validateUpdatable() {
