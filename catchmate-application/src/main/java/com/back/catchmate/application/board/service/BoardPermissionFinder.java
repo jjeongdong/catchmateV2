@@ -13,6 +13,6 @@ public class BoardPermissionFinder implements DomainFinder<Board> {
 
     @Override
     public Board searchById(Long boardId) {
-        return boardService.getBoard(boardId); // 기존 Service 재사용
+        return boardService.getBoard(boardId);
     }
 }

@@ -1,5 +1,6 @@
 package com.back.catchmate.domain.report.model;
 
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
 import com.back.catchmate.domain.user.model.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class Report {
+public class Report implements ResourceOwnership {
     private Long id;
     private User reporter;      // 신고자
     private User reportedUser;  // 신고 대상자
@@ -31,5 +32,10 @@ public class Report {
 
     public void process() {
         this.completed = true;
+    }
+
+    @Override
+    public Long getOwnershipId() {
+        return reporter.getId();
     }
 }

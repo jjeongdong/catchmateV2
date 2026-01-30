@@ -1,0 +1,20 @@
+package com.back.catchmate.application.enroll.service;
+
+import com.back.catchmate.domain.common.permission.DomainFinder;
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
+import com.back.catchmate.domain.enroll.model.Enroll;
+import com.back.catchmate.domain.enroll.service.EnrollService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class EnrollHostFinder implements DomainFinder<ResourceOwnership> {
+    private final EnrollService enrollService;
+
+    @Override
+    public ResourceOwnership searchById(Long enrollId) {
+        Enroll enroll = enrollService.getEnrollById(enrollId);
+        return enroll.getBoard();
+    }
+}

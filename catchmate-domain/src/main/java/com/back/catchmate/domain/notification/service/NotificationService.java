@@ -22,15 +22,9 @@ public class NotificationService {
         return notificationRepository.findAllByUserId(userId, pageable);
     }
 
-    public Notification getNotification(Long userId, Long notificationId) {
-        Notification notification = notificationRepository.findById(notificationId)
+    public Notification getNotification(Long notificationId) {
+        return notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOTIFICATION_NOT_FOUND));
-
-        if (!notification.getUser().getId().equals(userId)) {
-            throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
-        }
-
-        return notification;
     }
 
     public void updateNotification(Notification notification) {

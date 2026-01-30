@@ -30,7 +30,12 @@ public class DataPermissionAspect {
 
     // 커스텀 어노테이션들을 모두 감지
     @Before("@annotation(com.back.catchmate.global.aop.permission.CheckBoardPermission) || " +
-            "@annotation(com.back.catchmate.global.aop.permission.CheckUserPermission)")
+            "@annotation(com.back.catchmate.global.aop.permission.CheckEnrollApplicantPermission) || " +
+            "@annotation(com.back.catchmate.global.aop.permission.CheckEnrollHostPermission) || " +
+            "@annotation(com.back.catchmate.global.aop.permission.CheckNotificationPermission) || " +
+            "@annotation(com.back.catchmate.global.aop.permission.CheckInquiryPermission) || " +
+            "@annotation(com.back.catchmate.global.aop.permission.CheckReportPermission)")
+
     public void checkPermission(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -91,7 +96,7 @@ public class DataPermissionAspect {
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null || "anonymousUser".equals(authentication.getPrincipal())) {
-             throw new BaseException(ErrorCode.INVALID_ACCESS_TOKEN);
+            throw new BaseException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
         return Long.parseLong(authentication.getPrincipal().toString());
     }

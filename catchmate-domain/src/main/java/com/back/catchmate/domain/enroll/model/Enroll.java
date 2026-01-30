@@ -1,6 +1,7 @@
 package com.back.catchmate.domain.enroll.model;
 
 import com.back.catchmate.domain.board.model.Board;
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
 import com.back.catchmate.domain.user.model.User;
 import error.ErrorCode;
 import error.exception.BaseException;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class Enroll {
+public class Enroll implements ResourceOwnership {
     private Long id;
     private User user;
     private Board board;
@@ -49,5 +50,14 @@ public class Enroll {
             throw new BaseException(ErrorCode.ALREADY_ENROLL_REJECTED);
         }
         this.acceptStatus = AcceptStatus.REJECTED;
+    }
+
+    @Override
+    public Long getOwnershipId() {
+        return user.getId();
+    }
+
+    public Long getHostId() {
+        return this.board.getUser().getId();
     }
 }

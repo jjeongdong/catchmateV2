@@ -217,18 +217,13 @@ public class EnrollUseCase {
         Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
         Board board = enroll.getBoard();
 
-        // 2. 권한 검증 (게시글 작성자만 수락 가능)
-        if (!board.getUser().getId().equals(userId)) {
-            throw new BaseException(ErrorCode.ENROLL_ACCEPT_INVALID);
-        }
-
-        // 3. 게시글 인원 확인 및 증가
+        // 2. 게시글 인원 확인 및 증가
         board.increaseCurrentPerson();
 
-        // 4. 신청 상태 변경
+        // 3. 신청 상태 변경
         enroll.accept();
 
-        // 5. 변경 사항 저장
+        // 4. 변경 사항 저장
         boardService.updateBoard(board);
         enrollService.updateEnrollment(enroll);
 
@@ -258,15 +253,10 @@ public class EnrollUseCase {
         Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
         Board board = enroll.getBoard();
 
-        // 2. 권한 검증 (게시글 작성자만 거절 가능)
-        if (!board.getUser().getId().equals(userId)) {
-            throw new BaseException(ErrorCode.ENROLL_REJECT_INVALID);
-        }
-
-        // 3. 신청 상태 변경
+        // 2. 신청 상태 변경
         enroll.reject();
 
-        // 4. 변경 사항 저장
+        // 3. 변경 사항 저장
         enrollService.updateEnrollment(enroll);
 
         saveNotification(

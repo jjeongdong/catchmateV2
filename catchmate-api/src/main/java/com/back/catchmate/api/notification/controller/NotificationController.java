@@ -3,7 +3,10 @@ package com.back.catchmate.api.notification.controller;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.application.notification.NotificationUseCase;
 import com.back.catchmate.application.notification.dto.response.NotificationResponse;
+import com.back.catchmate.domain.common.permission.CheckDataPermission;
+import com.back.catchmate.domain.common.permission.PermissionId;
 import com.back.catchmate.global.annotation.AuthUser;
+import com.back.catchmate.global.aop.permission.CheckNotificationPermission;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,20 +35,22 @@ public class NotificationController {
         return notificationUseCase.getNotifications(userId, page, size);
     }
 
+    @CheckNotificationPermission
     @Operation(summary = "알림 상세 조회", description = "알림을 상세 조회하고 읽음 상태로 변경합니다.")
     @GetMapping("/{notificationId}")
     public NotificationResponse getNotification(
             @Parameter(hidden = true) @AuthUser Long userId,
-            @PathVariable Long notificationId
+            @PermissionId @PathVariable Long notificationId
     ) {
         return notificationUseCase.getNotification(userId, notificationId);
     }
 
+    @CheckNotificationPermission
     @Operation(summary = "알림 삭제", description = "특정 알림을 삭제합니다.")
     @DeleteMapping("/{notificationId}")
     public void deleteNotification(
             @Parameter(hidden = true) @AuthUser Long userId,
-            @PathVariable Long notificationId
+            @PermissionId @PathVariable Long notificationId
     ) {
         notificationUseCase.deleteNotification(userId, notificationId);
     }

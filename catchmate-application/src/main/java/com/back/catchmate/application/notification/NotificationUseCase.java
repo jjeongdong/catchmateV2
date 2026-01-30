@@ -37,7 +37,7 @@ public class NotificationUseCase {
     @Transactional
     public NotificationResponse getNotification(Long userId, Long notificationId) {
         // 1. 알림 조회
-        Notification notification = notificationService.getNotification(userId, notificationId);
+        Notification notification = notificationService.getNotification(notificationId);
 
         // 2. 읽음 처리
         if (!notification.isRead()) {

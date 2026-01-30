@@ -1,5 +1,6 @@
 package com.back.catchmate.domain.inquiry.model;
 
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
 import com.back.catchmate.domain.user.model.User;
 import inquiry.enums.InquiryType;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class Inquiry {
+public class Inquiry implements ResourceOwnership {
     private Long id;
     private User user;
     private InquiryType type;
@@ -33,5 +34,10 @@ public class Inquiry {
     public void registerAnswer(String answer) {
         this.answer = answer;
         this.status = InquiryStatus.ANSWERED;
+    }
+
+    @Override
+    public Long getOwnershipId() {
+        return user.getId();
     }
 }

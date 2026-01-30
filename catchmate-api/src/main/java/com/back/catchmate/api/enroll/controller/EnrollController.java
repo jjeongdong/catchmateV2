@@ -12,7 +12,10 @@ import com.back.catchmate.application.enroll.dto.response.EnrollCreateResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollApplicantResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollRejectResponse;
 import com.back.catchmate.application.enroll.dto.response.EnrollRequestResponse;
+import com.back.catchmate.domain.common.permission.PermissionId;
 import com.back.catchmate.global.annotation.AuthUser;
+import com.back.catchmate.global.aop.permission.CheckEnrollApplicantPermission;
+import com.back.catchmate.global.aop.permission.CheckEnrollHostPermission;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -69,7 +72,7 @@ public class EnrollController {
     @Operation(summary = "직관 신청 단일 상세 조회", description = "특정 신청 내역(enrollId)의 상세 정보를 조회합니다. (신청자 본인 또는 게시글 작성자만 가능)")
     public ResponseEntity<EnrollDetailResponse> getEnrollDetail(
             @AuthUser Long userId,
-            @PathVariable Long enrollId
+            @PermissionId @PathVariable Long enrollId
     ) {
         return ResponseEntity.ok(enrollUseCase.getEnrollDetail(userId, enrollId));
     }
@@ -80,24 +83,27 @@ public class EnrollController {
         return ResponseEntity.ok(enrollUseCase.getMyPendingEnrollCount(userId));
     }
 
+    @CheckEnrollApplicantPermission
     @DeleteMapping("/api/enrolls/{enrollId}")
     @Operation(summary = "직관 신청 취소 API", description = "직관 신청을 취소하는 API 입니다.")
     public ResponseEntity<EnrollCancelResponse> cancelEnroll(@PathVariable Long enrollId,
-                                                             @AuthUser Long userId) {
+                                                             @PermissionId @AuthUser Long userId) {
         return ResponseEntity.ok(enrollUseCase.cancelEnroll(enrollId, userId));
     }
 
+    @CheckEnrollHostPermission
     @PatchMapping("/api/enrolls/{enrollId}/accept")
     @Operation(summary = "직관 신청 수락 API", description = "들어온 직관 신청을 수락합니다. (게시글 작성자만 가능)")
     public ResponseEntity<EnrollAcceptResponse> acceptEnroll(@AuthUser Long userId,
-                                                             @PathVariable Long enrollId) {
+                                                             @PermissionId @PathVariable Long enrollId) {
         return ResponseEntity.ok(enrollUseCase.acceptEnroll(userId, enrollId));
     }
 
+    @CheckEnrollHostPermission
     @PatchMapping("/api/enrolls/{enrollId}/reject")
     @Operation(summary = "직관 신청 거절 API", description = "들어온 직관 신청을 거절합니다. (게시글 작성자만 가능)")
     public ResponseEntity<EnrollRejectResponse> rejectEnroll(@AuthUser Long userId,
-                                                             @PathVariable Long enrollId) {
+                                                             @PermissionId @PathVariable Long enrollId) {
         return ResponseEntity.ok(enrollUseCase.rejectEnroll(userId, enrollId));
     }
 }

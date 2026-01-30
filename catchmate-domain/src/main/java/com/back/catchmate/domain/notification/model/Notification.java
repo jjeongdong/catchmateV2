@@ -1,6 +1,7 @@
 package com.back.catchmate.domain.notification.model;
 
 import com.back.catchmate.domain.board.model.Board;
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
 import com.back.catchmate.domain.user.model.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class Notification {
+public class Notification implements ResourceOwnership {
     private Long id;
     private User user;
     private User sender;
@@ -35,5 +36,10 @@ public class Notification {
 
     public void markAsRead() {
         this.isRead = true;
+    }
+
+    @Override
+    public Long getOwnershipId() {
+        return user.getId();
     }
 }
