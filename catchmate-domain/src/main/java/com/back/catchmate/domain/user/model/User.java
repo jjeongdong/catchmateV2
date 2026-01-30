@@ -1,6 +1,7 @@
 package com.back.catchmate.domain.user.model;
 
 import com.back.catchmate.domain.club.model.Club;
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
 import lombok.Builder;
 import lombok.Getter;
 import user.enums.AlarmType;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 @Getter
 @Builder
-public class User {
+public class User implements ResourceOwnership {
     private Long id;
     private String email;
     private Provider provider;
@@ -114,5 +115,10 @@ public class User {
 
     public void markAsReported() {
         this.isReported = true;
+    }
+
+    @Override
+    public Long getOwnershipId() {
+        return this.id;
     }
 }

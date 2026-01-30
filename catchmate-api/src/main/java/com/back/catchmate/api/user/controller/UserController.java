@@ -9,7 +9,9 @@ import com.back.catchmate.application.user.dto.response.UserNicknameCheckRespons
 import com.back.catchmate.application.user.dto.response.UserRegisterResponse;
 import com.back.catchmate.application.user.dto.response.UserResponse;
 import com.back.catchmate.application.user.dto.response.UserUpdateResponse;
+import com.back.catchmate.domain.common.permission.PermissionId;
 import com.back.catchmate.global.annotation.AuthUser;
+import com.back.catchmate.global.aop.permission.CheckUserPermission;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,9 +44,10 @@ public class UserController {
         return ResponseEntity.ok(userUseCase.register(request.toCommand()));
     }
 
+    @CheckUserPermission
     @GetMapping("/profile")
     @Operation(summary = "나의 정보 조회 API", description = "마이페이지에서 나의 모든 정보를 조회하는 API 입니다.")
-    public ResponseEntity<UserResponse> getMyProfile(@AuthUser Long userId) {
+    public ResponseEntity<UserResponse> getMyProfile(@PermissionId @AuthUser Long userId) {
         return ResponseEntity.ok(userUseCase.getMyProfile(userId));
     }
 
@@ -61,9 +64,10 @@ public class UserController {
         return ResponseEntity.ok(userUseCase.checkNickname(nickName));
     }
 
+    @CheckUserPermission
     @PatchMapping(value = "/profile", consumes = "multipart/form-data")
     @Operation(summary = "나의 정보 수정 API", description = "마이페이지에서 나의 정보를 수정하는 API 입니다. (수정된 최신 유저 정보 반환)")
-    public ResponseEntity<UserUpdateResponse> updateProfile(@AuthUser Long userId,
+    public ResponseEntity<UserUpdateResponse> updateProfile(@PermissionId @AuthUser Long userId,
                                                             @RequestPart(value = "request", required = false) @Valid UserProfileUpdateRequest request,
                                                             @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
         UploadFile uploadFile = UploadFile.builder()
@@ -73,9 +77,10 @@ public class UserController {
         return ResponseEntity.ok(userUseCase.updateProfile(userId, request.toCommand(), uploadFile));
     }
 
+    @CheckUserPermission
     @PatchMapping("/alarm")
     @Operation(summary = "알림 설정 API", description = "유저의 알람 수신 여부를 변경하는 API 입니다.")
-    public ResponseEntity<UserAlarmUpdateResponse> updateAlarm(@AuthUser Long userId,
+    public ResponseEntity<UserAlarmUpdateResponse> updateAlarm(@PermissionId @AuthUser Long userId,
                                                                @RequestParam("alarmType") AlarmType alarmType,
                                                                @RequestParam("isEnabled") boolean isEnabled) {
         return ResponseEntity.ok(userUseCase.updateAlarm(userId, alarmType, isEnabled));

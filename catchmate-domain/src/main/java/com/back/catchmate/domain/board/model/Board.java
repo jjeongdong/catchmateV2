@@ -1,6 +1,7 @@
 package com.back.catchmate.domain.board.model;
 
 import com.back.catchmate.domain.club.model.Club;
+import com.back.catchmate.domain.common.permission.ResourceOwnership;
 import com.back.catchmate.domain.game.model.Game;
 import com.back.catchmate.domain.user.model.User;
 import error.ErrorCode;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class Board {
+public class Board implements ResourceOwnership {
     private Long id;
     private String title;
     private String content;
@@ -111,5 +112,10 @@ public class Board {
             throw new BaseException(ErrorCode.FULL_PERSON);
         }
         this.currentPerson++;
+    }
+
+    @Override
+    public Long getOwnershipId() {
+        return this.user.getId();
     }
 }

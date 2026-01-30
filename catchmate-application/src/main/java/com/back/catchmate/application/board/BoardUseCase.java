@@ -107,11 +107,6 @@ public class BoardUseCase {
         // 게시글 조회
         Board board = boardService.getBoard(boardId);
 
-        // 권한 체크
-        if (!board.getUser().getId().equals(userId)) {
-            throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
-        }
-
         // 1. 응원 구단 Null 체크
         Club cheerClub = null;
         if (command.getCheerClubId() != null) {
@@ -258,10 +253,6 @@ public class BoardUseCase {
     public BoardLiftUpResponse updateLiftUpDate(Long userId, Long boardId) {
         Board board = boardService.getBoard(boardId);
 
-        if (!board.getUser().getId().equals(userId)) {
-            throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
-        }
-
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextLiftUpAllowed = board.getLiftUpDate().plusDays(3);
 
@@ -287,11 +278,6 @@ public class BoardUseCase {
     public void deleteBoard(Long userId, Long boardId) {
         // 게시글 조회
         Board board = boardService.getBoard(boardId);
-
-        // 권한 체크
-        if (!board.getUser().getId().equals(userId)) {
-            throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
-        }
 
         // 도메인 로직 실행
         board.delete();

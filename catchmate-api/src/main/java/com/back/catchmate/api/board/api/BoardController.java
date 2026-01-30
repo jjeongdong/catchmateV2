@@ -7,7 +7,9 @@ import com.back.catchmate.application.board.dto.response.BoardLiftUpResponse;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.board.dto.response.BoardTempResponse;
 import com.back.catchmate.application.common.PagedResponse;
+import com.back.catchmate.domain.common.permission.PermissionId;
 import com.back.catchmate.global.annotation.AuthUser;
+import com.back.catchmate.global.aop.permission.CheckBoardPermission;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -94,25 +96,28 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
+    @CheckBoardPermission
     @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정 API", description = "게시글을 수정합니다.")
     public ResponseEntity<BoardResponse> updateBoard(@AuthUser Long userId,
-                                                     @PathVariable Long boardId,
+                                                     @PathVariable @PermissionId Long boardId,
                                                      @Valid @RequestBody BoardCreateOrUpdateRequest request) {
         return ResponseEntity.ok(boardUseCase.writeBoard(userId, request.toCommand(boardId)));
     }
 
+    @CheckBoardPermission
     @PatchMapping("/{boardId}/lift-up")
     @Operation(summary = "게시글 끌어올리기 API", description = "게시글을 끌어올립니다.")
     public BoardLiftUpResponse updateLiftUpDate(@AuthUser Long userId,
-                                                @PathVariable Long boardId) {
+                                                @PathVariable @PermissionId Long boardId) {
         return boardUseCase.updateLiftUpDate(userId, boardId);
     }
 
+    @CheckBoardPermission
     @DeleteMapping("/{boardId}")
     @Operation(summary = "게시글 삭제 API", description = "게시글을 삭제합니다.")
     public ResponseEntity<Void> deleteBoard(@AuthUser Long userId,
-                                            @PathVariable Long boardId) {
+                                            @PathVariable @PermissionId Long boardId) {
         boardUseCase.deleteBoard(userId, boardId);
         return ResponseEntity.ok().build();
     }
