@@ -20,16 +20,24 @@ public class AuthUseCase {
     private final UserService userService;
     private final AuthService authService;
 
-    public Long extractUserId(String token) {
-        return authService.extractUserIdFromToken(token);
+    // =================================================================================
+    // Read (토큰 파싱)
+    // =================================================================================
+
+    public Long getUserId(String token) {
+        return authService.getUserIdFromToken(token);
     }
 
-    public String extractUserRole(String token) {
-        return authService.extractUserRoleFromToken(token);
+    public String getUserRole(String token) {
+        return authService.getUserRoleFromToken(token);
     }
+
+    // =================================================================================
+    // Create (토큰 발급/로그인)
+    // =================================================================================
 
     @Transactional
-    public AuthLoginResponse login(AuthLoginCommand command) {
+    public AuthLoginResponse createToken(AuthLoginCommand command) {
         // 1. 유저 조회
         Optional<User> userOptional = userService.findByProviderId(command.getProviderIdWithProvider());
 
@@ -40,29 +48,37 @@ public class AuthUseCase {
 
         // 3. 유저가 존재하면 로그인 성공
         User user = userOptional.get();
-        AuthToken token = authService.login(user, command.getFcmToken());
+        AuthToken token = authService.createToken(user, command.getFcmToken());
 
         return AuthLoginResponse.of(token.getAccessToken(), token.getRefreshToken(), false);
     }
 
-    public AuthReissueResponse reissue(String refreshToken) {
-        Long userId = authService.extractUserIdFromRefreshToken(refreshToken);
+    // =================================================================================
+    // Update (토큰 재발급)
+    // =================================================================================
+
+    public AuthReissueResponse updateToken(String refreshToken) {
+        Long userId = authService.getUserIdFromRefreshToken(refreshToken);
         authService.validateRefreshTokenExistence(refreshToken);
 
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
 
-        String newAccessToken = authService.issueAccessToken(user);
+        String newAccessToken = authService.createAccessToken(user);
         return AuthReissueResponse.of(newAccessToken);
     }
 
+    // =================================================================================
+    // Delete (토큰 삭제/로그아웃)
+    // =================================================================================
+
     @Transactional
-    public void logout(String refreshToken) {
-        Long userId = authService.extractUserIdFromRefreshToken(refreshToken);
-        User user = userService.getUserById(userId);
+    public void deleteToken(String refreshToken) {
+        Long userId = authService.getUserIdFromRefreshToken(refreshToken);
+        User user = userService.getUser(userId);
 
         user.deleteFcmToken();
         userService.updateUser(user);
 
-        authService.logout(refreshToken);
+        authService.deleteToken(refreshToken);
     }
 }

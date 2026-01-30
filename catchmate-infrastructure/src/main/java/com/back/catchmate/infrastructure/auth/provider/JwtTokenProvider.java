@@ -47,12 +47,12 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public Long parseUserId(String token) {
+    public Long getUserId(String token) {
         try {
             token = removeBearer(token);
 
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey()) // Key 객체 사용
+                    .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -65,11 +65,30 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public Long getRefreshTokenExpiration() {
+    public String getUserRole(String token) {
+        try {
+            token = removeBearer(token);
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return claims.get(ROLE_CLAIM, String.class);
+        } catch (Exception e) {
+            return Authority.ROLE_USER.name(); // 기본값 설정
+        }
+    }
+
+    @Override
+    public Long getRefreshTokenExpirationTime() {
         return refreshTokenExpirationPeriod;
     }
 
-    // 내부 헬퍼 메서드
+    // =================================================================================
+    // Private Helpers
+    // =================================================================================
+
     private String createToken(Long userId, String tokenSubject, Long expirationPeriod, Authority authority) {
         Date now = new Date();
         Date expirationTime = new Date(now.getTime() + expirationPeriod);
@@ -97,21 +116,5 @@ public class JwtTokenProvider implements TokenProvider {
             return token.substring(BEARER.length());
         }
         return token;
-    }
-
-    @Override
-    public String getRole(String token) {
-        try {
-            token = removeBearer(token);
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            return claims.get(ROLE_CLAIM, String.class);
-        } catch (Exception e) {
-            return Authority.ROLE_USER.name(); // 기본값 설정
-        }
     }
 }

@@ -22,7 +22,7 @@ public class InquiryUseCase {
 
     @Transactional
     public InquiryCreateResponse registerInquiry(Long userId, InquiryCreateCommand command) {
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
 
         Inquiry inquiry = Inquiry.createInquiry(
                 user,

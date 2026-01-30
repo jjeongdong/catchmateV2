@@ -53,7 +53,7 @@ public class EnrollUseCase {
     @Transactional
     public EnrollCreateResponse createEnroll(EnrollCreateCommand command) {
         // 신청자 정보 조회
-        User applicant = userService.getUserById(command.getUserId());
+        User applicant = userService.getUser(command.getUserId());
 
         // 게시글 정보 조회
         Board board = boardService.getCompletedBoard(command.getBoardId());
@@ -198,7 +198,7 @@ public class EnrollUseCase {
     @Transactional
     public EnrollCancelResponse cancelEnroll(Long enrollId, Long userId) {
         // 신청자 정보 조회
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
 
         // 직관 신청 조회
         Enroll enroll = enrollService.getEnrollById(enrollId);

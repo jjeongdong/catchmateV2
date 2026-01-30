@@ -24,20 +24,20 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 & 회원가입 API", description = "회원가입 & 로그인을 통해 토큰을 발급하는 API 입니다.")
-    public ResponseEntity<AuthLoginResponse> login(@Valid @RequestBody AuthLoginRequest request) {
-        return ResponseEntity.ok(authUseCase.login(request.toCommand()));
+    public ResponseEntity<AuthLoginResponse> createToken(@Valid @RequestBody AuthLoginRequest request) {
+        return ResponseEntity.ok(authUseCase.createToken(request.toCommand()));
     }
 
     @PostMapping("/reissue")
     @Operation(summary = "엑세스 토큰 재발급 API", description = "엑세스 토큰을 재발급하는 API 입니다.")
-    public ResponseEntity<AuthReissueResponse> reissue(@RequestHeader("RefreshToken") String refreshToken) {
-        return ResponseEntity.ok(authUseCase.reissue(refreshToken));
+    public ResponseEntity<AuthReissueResponse> updateToken(@RequestHeader("RefreshToken") String refreshToken) {
+        return ResponseEntity.ok(authUseCase.updateToken(refreshToken));
     }
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = "서버에서 리프레시 토큰을 삭제하여 로그아웃 처리합니다.")
-    public ResponseEntity<Void> logout(@RequestHeader("RefreshToken") String refreshToken) {
-        authUseCase.logout(refreshToken);
+    public ResponseEntity<Void> deleteToken(@RequestHeader("RefreshToken") String refreshToken) {
+        authUseCase.deleteToken(refreshToken);
         return ResponseEntity.ok().build();
     }
 }

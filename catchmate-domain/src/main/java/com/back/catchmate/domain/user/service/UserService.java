@@ -17,7 +17,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User registerUser(User user) {
+    // =================================================================================
+    // Create
+    // =================================================================================
+
+    public User createUser(User user) {
         Optional<User> existingUser = userRepository.findByProviderId(user.getProviderId());
         if (existingUser.isPresent()) {
             throw new BaseException(ErrorCode.USER_ALREADY_EXISTS);
@@ -26,7 +30,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserById(Long userId) {
+    // =================================================================================
+    // Read
+    // =================================================================================
+
+    public User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
     }
@@ -35,11 +43,7 @@ public class UserService {
         return userRepository.findByProviderId(providerIdWithProvider);
     }
 
-    public void updateUser(User user) {
-        userRepository.save(user);
-    }
-
-    public boolean checkNickname(String nickName) {
+    public boolean existsByNickName(String nickName) {
         return userRepository.existsByNickName(nickName);
     }
 
@@ -61,5 +65,13 @@ public class UserService {
 
     public DomainPage<User> getUsersByClub(String clubName, DomainPageable pageable) {
         return userRepository.findAllByClubName(clubName, pageable);
+    }
+
+    // =================================================================================
+    // Update
+    // =================================================================================
+
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 }

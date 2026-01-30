@@ -21,8 +21,8 @@ public class ReportUseCase {
     @Transactional
     public ReportCreateResponse createReport(Long reporterId, ReportCreateCommand command) {
         // 신고자 및 대상자 조회
-        User reporter = userService.getUserById(reporterId);
-        User reportedUser = userService.getUserById(command.getReportedUserId());
+        User reporter = userService.getUser(reporterId);
+        User reportedUser = userService.getUser(command.getReportedUserId());
 
         // 유효성 검사 (본인 신고 불가)
         if (reporter.getId().equals(reportedUser.getId())) {

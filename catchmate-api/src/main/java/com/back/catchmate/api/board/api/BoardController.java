@@ -3,10 +3,12 @@ package com.back.catchmate.api.board.api;
 import com.back.catchmate.api.board.dto.request.BoardCreateRequest;
 import com.back.catchmate.api.board.dto.request.BoardUpdateRequest;
 import com.back.catchmate.application.board.BoardUseCase;
+import com.back.catchmate.application.board.dto.response.BoardCreateResponse;
 import com.back.catchmate.application.board.dto.response.BoardDetailResponse;
 import com.back.catchmate.application.board.dto.response.BoardLiftUpResponse;
 import com.back.catchmate.application.board.dto.response.BoardResponse;
 import com.back.catchmate.application.board.dto.response.BoardTempDetailResponse;
+import com.back.catchmate.application.board.dto.response.BoardUpdateResponse;
 import com.back.catchmate.application.common.PagedResponse;
 import com.back.catchmate.domain.common.permission.PermissionId;
 import com.back.catchmate.global.annotation.AuthUser;
@@ -40,8 +42,8 @@ public class BoardController {
 
     @PostMapping
     @Operation(summary = "게시글 생성/임시저장 API", description = "게시글을 생성하거나 임시저장합니다. (isCompleted: true=게시, false=임시저장)")
-    public ResponseEntity<BoardResponse> createBoard(@AuthUser Long userId,
-                                                     @Valid @RequestBody BoardCreateRequest request) {
+    public ResponseEntity<BoardCreateResponse> createBoard(@AuthUser Long userId,
+                                                           @Valid @RequestBody BoardCreateRequest request) {
         return ResponseEntity.ok(boardUseCase.createBoard(userId, request.toCommand()));
     }
 
@@ -100,9 +102,9 @@ public class BoardController {
     @CheckBoardPermission
     @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정 API", description = "게시글을 수정합니다.")
-    public ResponseEntity<BoardResponse> updateBoard(@AuthUser Long userId,
-                                                     @PathVariable @PermissionId Long boardId,
-                                                     @Valid @RequestBody BoardUpdateRequest request) {
+    public ResponseEntity<BoardUpdateResponse> updateBoard(@AuthUser Long userId,
+                                                           @PathVariable @PermissionId Long boardId,
+                                                           @Valid @RequestBody BoardUpdateRequest request) {
         return ResponseEntity.ok(boardUseCase.updateBoard(userId, boardId, request.toCommand()));
     }
 

@@ -57,7 +57,7 @@ public class BoardUseCase {
         Optional<Board> oldDraft = boardService.findTempBoard(userId);
         oldDraft.ifPresent(boardService::deleteBoard);
 
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
 
         Club cheerClub = getCheerClub(command.getCheerClubId());
         Game game = getGame(command.getGameCreateCommand());
@@ -81,7 +81,7 @@ public class BoardUseCase {
     }
 
     public BoardDetailResponse getBoardDetail(Long userId, Long boardId) {
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
         Board board = boardService.getBoard(boardId);
 
         // 찜 여부 확인
@@ -98,7 +98,7 @@ public class BoardUseCase {
 
     public PagedResponse<BoardResponse> getBoardList(Long userId, LocalDate gameDate, Integer maxPerson, List<Long> preferredTeamIdList, int page, int size) {
         // 차단된 유저 ID 목록 조회
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
         List<Long> blockedUserIds = blockService.getBlockedUserIds(user);
 
         // 검색 조건 생성
@@ -125,8 +125,8 @@ public class BoardUseCase {
     }
 
     public PagedResponse<BoardResponse> getBoardListByUserId(Long targetUserId, Long loginUserId, int page, int size) {
-        User targetUser = userService.getUserById(targetUserId);
-        User loginUser = userService.getUserById(loginUserId);
+        User targetUser = userService.getUser(targetUserId);
+        User loginUser = userService.getUser(loginUserId);
 
         // 차단 여부 확인
         if (blockService.isUserBlocked(targetUser, loginUser)) {

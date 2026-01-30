@@ -28,7 +28,7 @@ public class BookmarkUseCase {
     public void toggleBookmark(Long userId, Long boardId) {
         // 게시글 존재 확인
         Board board = boardService.getBoard(boardId);
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
 
         // 찜 여부 확인 후 토글 처리
         bookmarkService.toggleBookmark(user, board);

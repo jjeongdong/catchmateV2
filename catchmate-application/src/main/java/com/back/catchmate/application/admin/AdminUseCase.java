@@ -89,7 +89,7 @@ public class AdminUseCase {
     }
 
     public AdminUserDetailResponse getUserDetail(Long userId) {
-        User user = userService.getUserById(userId);
+        User user = userService.getUser(userId);
         return AdminUserDetailResponse.from(user);
     }
 
@@ -234,7 +234,7 @@ public class AdminUseCase {
     @Transactional
     public NoticeCreateResponse createNotice(Long userId, NoticeCreateCommand command) {
         // 작성자(관리자) 정보 조회
-        User writer = userService.getUserById(userId);
+        User writer = userService.getUser(userId);
 
         Notice notice = Notice.createNotice(
                 writer,

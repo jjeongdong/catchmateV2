@@ -28,7 +28,7 @@ public class UserUseCase {
     private final ClubService clubService;
 
     @Transactional
-    public UserRegisterResponse register(UserRegisterCommand command) {
+    public UserRegisterResponse createUser(UserRegisterCommand command) {
         Club club = clubService.getClub(command.getFavoriteClubId());
 
         User user = User.createUser(
@@ -43,31 +43,31 @@ public class UserUseCase {
                 command.getFcmToken(),
                 command.getWatchStyle()
         );
-        User savedUser = userService.registerUser(user);
+        User savedUser = userService.createUser(user);
 
-        AuthToken token = authService.issueToken(savedUser);
+        AuthToken token = authService.createToken(savedUser);
 
         return UserRegisterResponse.of(savedUser.getId(), token.getAccessToken(), token.getRefreshToken(), savedUser.getCreatedAt());
     }
 
-    public UserResponse getMyProfile(Long userId) {
-        User user = userService.getUserById(userId);
+    public UserResponse getUserProfile(Long userId) {
+        User user = userService.getUser(userId);
         return UserResponse.from(user);
     }
 
-    public UserResponse getOtherUserProfile(Long currentUserId, Long targetUserId) {
-        User targetUser = userService.getUserById(targetUserId);
+    public UserResponse getUserProfileById(Long currentUserId, Long targetUserId) {
+        User targetUser = userService.getUser(targetUserId);
         return UserResponse.from(targetUser);
     }
 
-    public UserNicknameCheckResponse checkNickname(String nickName) {
-        boolean isAvailable = !userService.checkNickname(nickName);
+    public UserNicknameCheckResponse getUserNicknameAvailability(String nickName) {
+        boolean isAvailable = !userService.existsByNickName(nickName);
         return UserNicknameCheckResponse.of(nickName, isAvailable);
     }
 
     @Transactional
-    public UserUpdateResponse updateProfile(Long userId, UserProfileUpdateCommand command, UploadFile uploadFile) {
-        User user = userService.getUserById(userId);
+    public UserUpdateResponse updateUserProfile(Long userId, UserProfileUpdateCommand command, UploadFile uploadFile) {
+        User user = userService.getUser(userId);
 
         Club club = null;
         if (command.hasFavoriteClubChange()) {
@@ -84,8 +84,8 @@ public class UserUseCase {
     }
 
     @Transactional
-    public UserAlarmUpdateResponse updateAlarm(Long userId, AlarmType alarmType, boolean isEnabled) {
-        User user = userService.getUserById(userId);
+    public UserAlarmUpdateResponse updateUserAlarm(Long userId, AlarmType alarmType, boolean isEnabled) {
+        User user = userService.getUser(userId);
         user.updateAlarm(alarmType, isEnabled);
         userService.updateUser(user);
 

@@ -38,46 +38,46 @@ public class UserController {
 
     @PostMapping("/additional-info")
     @Operation(summary = "추가 정보 입력 API", description = "최초 로그인시, 추가 정보를 입력하는 API 입니다.")
-    public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserRegisterRequest request) {
-        return ResponseEntity.ok(userUseCase.register(request.toCommand()));
+    public ResponseEntity<UserRegisterResponse> createUser(@Valid @RequestBody UserRegisterRequest request) {
+        return ResponseEntity.ok(userUseCase.createUser(request.toCommand()));
     }
 
     @GetMapping("/profile")
     @Operation(summary = "나의 정보 조회 API", description = "마이페이지에서 나의 모든 정보를 조회하는 API 입니다.")
-    public ResponseEntity<UserResponse> getMyProfile(@AuthUser Long userId) {
-        return ResponseEntity.ok(userUseCase.getMyProfile(userId));
+    public ResponseEntity<UserResponse> getUserProfile(@AuthUser Long userId) {
+        return ResponseEntity.ok(userUseCase.getUserProfile(userId));
     }
 
     @GetMapping("/profile/{profileUserId}")
     @Operation(summary = "유저 정보 조회 API", description = "다른 유저의 정보를 조회하는 API 입니다.")
-    public ResponseEntity<UserResponse> getOtherUserProfile(@AuthUser Long userId,
-                                                            @PathVariable Long profileUserId) {
-        return ResponseEntity.ok(userUseCase.getOtherUserProfile(userId, profileUserId));
+    public ResponseEntity<UserResponse> getUserProfileById(@AuthUser Long userId,
+                                                           @PathVariable Long profileUserId) {
+        return ResponseEntity.ok(userUseCase.getUserProfileById(userId, profileUserId));
     }
 
     @GetMapping("/check-nickname")
     @Operation(summary = "닉네임 중복 확인 API", description = "닉네임의 중복 여부를 확인하는 API 입니다.")
-    public ResponseEntity<UserNicknameCheckResponse> checkNickname(@RequestParam("nickName") String nickName) {
-        return ResponseEntity.ok(userUseCase.checkNickname(nickName));
+    public ResponseEntity<UserNicknameCheckResponse> getUserNicknameAvailability(@RequestParam("nickName") String nickName) {
+        return ResponseEntity.ok(userUseCase.getUserNicknameAvailability(nickName));
     }
 
     @PatchMapping(value = "/profile", consumes = "multipart/form-data")
     @Operation(summary = "나의 정보 수정 API", description = "마이페이지에서 나의 정보를 수정하는 API 입니다. (수정된 최신 유저 정보 반환)")
-    public ResponseEntity<UserUpdateResponse> updateProfile(@AuthUser Long userId,
-                                                            @RequestPart(value = "request", required = false) @Valid UserProfileUpdateRequest request,
-                                                            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
+    public ResponseEntity<UserUpdateResponse> updateUserProfile(@AuthUser Long userId,
+                                                                @RequestPart(value = "request", required = false) @Valid UserProfileUpdateRequest request,
+                                                                @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
         UploadFile uploadFile = UploadFile.builder()
                 .originalFilename(profileImage.getOriginalFilename())
                 .inputStream(profileImage.getInputStream())
                 .build();
-        return ResponseEntity.ok(userUseCase.updateProfile(userId, request.toCommand(), uploadFile));
+        return ResponseEntity.ok(userUseCase.updateUserProfile(userId, request.toCommand(), uploadFile));
     }
 
     @PatchMapping("/alarm")
     @Operation(summary = "알림 설정 API", description = "유저의 알람 수신 여부를 변경하는 API 입니다.")
-    public ResponseEntity<UserAlarmUpdateResponse> updateAlarm(@AuthUser Long userId,
-                                                               @RequestParam("alarmType") AlarmType alarmType,
-                                                               @RequestParam("isEnabled") boolean isEnabled) {
-        return ResponseEntity.ok(userUseCase.updateAlarm(userId, alarmType, isEnabled));
+    public ResponseEntity<UserAlarmUpdateResponse> updateUserAlarm(@AuthUser Long userId,
+                                                                   @RequestParam("alarmType") AlarmType alarmType,
+                                                                   @RequestParam("isEnabled") boolean isEnabled) {
+        return ResponseEntity.ok(userUseCase.updateUserAlarm(userId, alarmType, isEnabled));
     }
 }

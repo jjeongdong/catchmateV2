@@ -25,8 +25,8 @@ public class UserBlockUseCase {
 
     @Transactional
     public BlockActionResponse blockUser(Long blockerId, Long blockedId) {
-        User blocker = userService.getUserById(blockerId);
-        User blocked = userService.getUserById(blockedId);
+        User blocker = userService.getUser(blockerId);
+        User blocked = userService.getUser(blockedId);
 
         // 자기 자신 차단 방지
         if (blockerId.equals(blockedId)) {
@@ -39,8 +39,8 @@ public class UserBlockUseCase {
 
     @Transactional
     public BlockActionResponse unblockUser(Long blockerId, Long blockedId) {
-        User blocker = userService.getUserById(blockerId);
-        User blocked = userService.getUserById(blockedId);
+        User blocker = userService.getUser(blockerId);
+        User blocked = userService.getUser(blockedId);
 
         blockService.unblockUser(blocker, blocked);
         return BlockActionResponse.of(blockedId, "차단을 해제했습니다.");
