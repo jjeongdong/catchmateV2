@@ -90,12 +90,6 @@ public class Board {
         if (game == null) {
             throw new BaseException(ErrorCode.BOARD_GAME_MISSING);
         }
-        if (preferredGender == null || preferredGender.isBlank()) {
-            throw new BaseException(ErrorCode.BOARD_PREFERRED_GENDER_MISSING);
-        }
-        if (preferredAgeRange == null || preferredAgeRange.isBlank()) {
-            throw new BaseException(ErrorCode.BOARD_PREFERRED_AGE_RANGE_MISSING);
-        }
     }
 
     private void validateUpdatable() {
