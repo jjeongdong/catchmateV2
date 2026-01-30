@@ -2,9 +2,11 @@ package com.back.catchmate.infrastructure.persistence.enroll.repository;
 
 import com.back.catchmate.domain.enroll.model.AcceptStatus;
 import com.back.catchmate.infrastructure.persistence.enroll.entity.EnrollEntity;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -13,6 +15,10 @@ import java.util.Optional;
 
 public interface JpaEnrollRepository extends JpaRepository<EnrollEntity, Long> {
     Optional<EnrollEntity> findByUserIdAndBoardId(Long userId, Long boardId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT e FROM EnrollEntity e WHERE e.id = :id")
+    Optional<EnrollEntity> findByIdWithPessimisticLock(@Param("id") Long id);
 
     @Query("SELECT e FROM EnrollEntity e " +
             "JOIN FETCH e.board b " +

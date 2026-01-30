@@ -214,7 +214,7 @@ public class EnrollUseCase {
     @Transactional
     public EnrollAcceptResponse acceptEnroll(Long userId, Long enrollId) {
         // 1. 신청 내역 조회
-        Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
+        Enroll enroll = enrollService.getEnrollByIdWithLock(enrollId);
         Board board = enroll.getBoard();
 
         // 2. 게시글 인원 확인 및 증가
@@ -250,7 +250,7 @@ public class EnrollUseCase {
     @Transactional
     public EnrollRejectResponse rejectEnroll(Long userId, Long enrollId) {
         // 1. 신청 내역 조회
-        Enroll enroll = enrollService.getEnrollWithFetch(enrollId);
+        Enroll enroll = enrollService.getEnrollByIdWithLock(enrollId);
         Board board = enroll.getBoard();
 
         // 2. 신청 상태 변경

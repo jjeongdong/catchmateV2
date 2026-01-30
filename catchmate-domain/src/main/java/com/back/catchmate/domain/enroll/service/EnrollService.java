@@ -47,6 +47,11 @@ public class EnrollService {
                 .orElseThrow(() -> new BaseException(ErrorCode.ENROLL_NOT_FOUND));
     }
 
+    public Enroll getEnrollByIdWithLock(Long enrollId) {
+        return enrollRepository.findByIdWithLock(enrollId)
+                .orElseThrow(() -> new BaseException(ErrorCode.ENROLL_NOT_FOUND));
+    }
+
     public Optional<Enroll> getEnrollByUserAndBoard(User user, Board board) {
         return enrollRepository.findByUserAndBoard(user, board);
     }

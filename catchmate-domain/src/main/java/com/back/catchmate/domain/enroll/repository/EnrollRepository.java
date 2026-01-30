@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface EnrollRepository {
     Enroll save(Enroll enroll);
     Optional<Enroll> findById(Long id);
+    Optional<Enroll> findByIdWithLock(Long id);
     Optional<Enroll> findByUserAndBoard(User user, Board board);
     DomainPage<Enroll> findAllByUserId(Long userId, DomainPageable pageable);
     DomainPage<Enroll> findByBoardIdAndStatus(Long boardId, AcceptStatus status, DomainPageable pageable);
