@@ -94,8 +94,8 @@ public class EnrollController {
     @CheckEnrollApplicantPermission
     @DeleteMapping("/api/enrolls/{enrollId}")
     @Operation(summary = "직관 신청 취소 API", description = "직관 신청을 취소하는 API 입니다.")
-    public ResponseEntity<EnrollCancelResponse> deleteEnroll(@PathVariable Long enrollId,
-                                                             @PermissionId @AuthUser Long userId) {
-        return ResponseEntity.ok(enrollUseCase.deleteEnroll(enrollId, userId));
+    public ResponseEntity<EnrollCancelResponse> deleteEnroll(@AuthUser Long userId,
+                                                             @PermissionId @PathVariable Long enrollId) {
+        return ResponseEntity.ok(enrollUseCase.deleteEnroll(userId, enrollId));
     }
 }

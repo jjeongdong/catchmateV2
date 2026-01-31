@@ -264,7 +264,7 @@ public class EnrollUseCase {
     }
 
     @Transactional
-    public EnrollCancelResponse deleteEnroll(Long enrollId, Long userId) {
+    public EnrollCancelResponse deleteEnroll(Long userId, Long enrollId) {
         // 직관 신청 조회
         Enroll enroll = enrollService.getEnroll(enrollId);
 
