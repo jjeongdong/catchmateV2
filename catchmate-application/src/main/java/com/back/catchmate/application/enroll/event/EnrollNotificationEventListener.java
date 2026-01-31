@@ -13,7 +13,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class EnrollNotificationEventListener {
-
     private final NotificationSender notificationSender;
 
     @Async
@@ -24,8 +23,6 @@ public class EnrollNotificationEventListener {
         if (recipient.getFcmToken() == null || recipient.getEnrollAlarm() != 'Y') {
             return;
         }
-
-        System.out.println("Sending notification to token: " + recipient.getFcmToken());
 
         Map<String, String> data = Map.of(
                 "type", event.type(),

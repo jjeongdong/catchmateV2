@@ -14,7 +14,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class AdminInquiryAnswerNotificationEventListener {
-
     private final NotificationSender notificationSender;
 
     @Async
